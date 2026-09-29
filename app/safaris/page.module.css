@@ -1,0 +1,106 @@
+.hero { padding: 76px 0 48px; text-align: center; }
+.hero p { max-width: 56ch; margin: 14px auto 0; color: var(--tanova-muted); font-size: 16px; line-height: 1.6; }
+.sectionHead { padding: var(--sp-8) 0 var(--sp-6); text-align: center; }
+.sectionHead p { max-width: 56ch; margin: 14px auto 0; color: var(--tanova-muted); font-size: 16px; line-height: 1.6; }
+.grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; padding-bottom: 90px; animation: fadeInUp var(--dur-base) var(--ease-out) both; }
+.card {
+  border-radius: var(--radius-lg); overflow: hidden; background: #fff; box-shadow: var(--shadow-sm); display: flex; flex-direction: column;
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+.card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+/* .img carries the card's own background-image (set inline per-card) and may also
+   contain absolutely-positioned badges as children (SafarisBrowser's cards do) — so
+   the hover zoom animates a ::after layer instead of transforming .img itself, which
+   would otherwise zoom the badges along with the photo. */
+.img { position: relative; aspect-ratio: 4/3; background-size: cover; background-position: center; overflow: hidden; }
+.img::after { content: ""; position: absolute; inset: 0; background-size: cover; background-position: center; background-image: inherit; transition: transform .5s ease; }
+.card:hover .img::after { transform: scale(1.05); }
+.cardBadges { position: absolute; top: 12px; left: 12px; }
+.body { padding: 20px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+.title { font-family: var(--serif); font-size: 19px; color: var(--tanova-primary); }
+.desc { font-size: 13.5px; color: var(--tanova-muted); line-height: 1.5; flex: 1; }
+.link { font-size: 13px; font-weight: 700; color: var(--tanova-accent); margin-top: 8px; }
+
+.filterBar {
+  display: flex; gap: 14px; flex-wrap: wrap; align-items: flex-end;
+  background: #fff; border-radius: var(--radius-md); padding: 18px 20px; margin-bottom: 20px;
+  box-shadow: var(--shadow-sm);
+}
+.filterField { display: flex; flex-direction: column; gap: 6px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--tanova-muted); }
+.filterField select { border: 1px solid var(--tanova-line); border-radius: var(--radius-sm); padding: 9px 12px; font-size: 13.5px; font-family: inherit; text-transform: none; letter-spacing: normal; font-weight: 500; color: var(--tanova-text); min-width: 160px; }
+.filterClear { margin-left: auto; align-self: center; background: none; border: none; color: var(--tanova-accent); font-size: 12.5px; font-weight: 700; cursor: pointer; }
+.resultCount { font-size: 13px; color: var(--tanova-muted); margin-bottom: 18px; }
+.noResults { font-size: 14px; color: var(--tanova-muted); padding: 40px 0 90px; }
+.noResults a { color: var(--tanova-primary); font-weight: 700; }
+
+.loadMoreRow { display: flex; flex-direction: column; align-items: center; gap: 10px; margin: 12px 0 90px; }
+.loadMoreCount { font-size: 12px; color: var(--tanova-muted); }
+
+.compareToggle {
+  position: absolute; top: 12px; right: 12px; z-index: 1;
+  display: flex; align-items: center; gap: 5px;
+  background: rgba(255,255,255,.92); backdrop-filter: blur(4px);
+  border: none; border-radius: 999px; padding: 7px 12px 7px 10px;
+  font-size: 11.5px; font-weight: 700; color: var(--tanova-text); cursor: pointer;
+  transition: background var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
+}
+.compareToggle svg { opacity: .3; }
+.compareToggle:hover { background: #fff; }
+.compareToggle:disabled { opacity: .5; cursor: not-allowed; }
+.compareToggleActive { background: var(--tanova-primary); color: #fff; }
+.compareToggleActive svg { opacity: 1; }
+
+.compareBar {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 40;
+  background: #fff; box-shadow: 0 -10px 30px -14px rgba(10,30,29,.3);
+  animation: fadeInUp var(--dur-base) var(--ease-out) both;
+}
+.compareBarInner {
+  max-width: var(--container); margin: 0 auto; padding: 14px 24px;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+}
+.compareBarThumbs { display: flex; align-items: center; gap: 8px; }
+.compareThumb { width: 42px; height: 42px; border-radius: var(--radius-sm); background-size: cover; background-position: center; box-shadow: 0 0 0 2px #fff, 0 0 0 3px var(--tanova-line); }
+.compareBarLabel { font-size: 12.5px; color: var(--tanova-muted); margin-left: 6px; }
+.compareBarActions { display: flex; align-items: center; gap: 14px; }
+.compareClear { background: none; border: none; font-size: 12.5px; font-weight: 700; color: var(--tanova-muted); cursor: pointer; }
+.compareClear:hover { color: var(--tanova-text); }
+
+.compareModalOverlay {
+  position: fixed; inset: 0; z-index: 60; background: rgba(10,20,18,.55);
+  display: flex; align-items: center; justify-content: center; padding: 24px;
+}
+.compareModal {
+  position: relative; background: #fff; border-radius: var(--radius-lg); box-shadow: var(--shadow-float);
+  max-width: 960px; width: 100%; max-height: 84vh; overflow: hidden;
+}
+.compareClose {
+  position: absolute; top: 14px; right: 14px; z-index: 2;
+  width: 32px; height: 32px; border-radius: 50%; border: none; background: var(--muted-bg);
+  display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--tanova-text);
+}
+.compareClose:hover { background: var(--tanova-line); }
+.compareScroll { overflow: auto; max-height: 84vh; padding: 28px; }
+.compareTable { border-collapse: collapse; width: 100%; }
+.compareTable th, .compareTable td { text-align: left; padding: 12px 18px 12px 0; border-bottom: 1px solid var(--tanova-line); font-size: 13.5px; color: var(--tanova-text); vertical-align: top; white-space: nowrap; }
+.compareTable td:first-child { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--tanova-muted); white-space: nowrap; }
+.compareTable th { vertical-align: bottom; padding-top: 0; }
+.compareImg { width: 160px; aspect-ratio: 4/3; border-radius: var(--radius-sm); background-size: cover; background-position: center; margin-bottom: 10px; }
+.compareTable th b { display: block; font-family: var(--serif); font-size: 15px; color: var(--tanova-primary); white-space: normal; max-width: 160px; margin-bottom: 8px; font-weight: 700; }
+.compareRemove { background: none; border: 1px solid var(--tanova-line); border-radius: 999px; padding: 4px 12px; font-size: 11px; font-weight: 700; color: var(--tanova-muted); cursor: pointer; }
+.compareRemove:hover { border-color: var(--off-fg); color: var(--off-fg); }
+.compareIncluded { list-style: none; white-space: normal; max-width: 200px; }
+.compareIncluded li { font-size: 12.5px; padding: 2px 0; }
+.compareIncluded li::before { content: "✓ "; color: var(--ok-fg); font-weight: 700; }
+
+@media (max-width: 900px) { .grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 620px) {
+  .grid { grid-template-columns: 1fr; }
+  .filterBar { flex-direction: column; align-items: stretch; }
+  .filterField select { min-width: 0; width: 100%; }
+  .filterClear { margin-left: 0; }
+  .compareBarInner { padding: 12px 16px; }
+  .compareBarLabel { display: none; }
+  .compareModalOverlay { padding: 0; align-items: flex-end; }
+  .compareModal { max-width: none; max-height: 88vh; border-radius: 20px 20px 0 0; }
+}

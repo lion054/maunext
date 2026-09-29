@@ -1,0 +1,56 @@
+/** Real Tanova Vendor API numeric service IDs, keyed by the slug already used
+ *  throughout lib/tours.ts and lib/stays.ts. Fetched live from GET /services/tours
+ *  and GET /services/hotels on 2026-09-29 — POST /bookings needs a real numeric
+ *  service_id, not the slug, so this is the lookup the booking route resolves against. */
+
+export const TOUR_SERVICE_IDS: Record<string, number> = {
+  "3-days-mount-meru": 564,
+  "4-days-mount-meru": 565,
+  "6-day-kilimanjaro-group-trek-via-machame-route": 597,
+  "6-day-kilimanjaro-group-trek-via-marangu-route": 598,
+  "7-day-kilimanjaro-group-trek-via-lemosho-route": 600,
+  "7-day-kilimanjaro-group-trek-via-machame-route": 599,
+  "8-day-kilimanjaro-group-trek-via-lemosho-route": 601,
+  "8-day-northern-circuit-group-trek": 602,
+  "arts-and-sports-volunteering-in-tanzania": 560,
+  "clinical-health-provider-volunteering-in-tanzania": 576,
+  "cycling-and-tree-planting-volunteering-program": 561,
+  "grand-tanzanian-journey": 584,
+  "jungle-escape": 582,
+  "lake-dreams": 592,
+  "lemosho-route-10-day-adventure-to-the-summit-of-mt-kilimanjaro": 571,
+  "lengais-legacy": 587,
+  "luxury-golf-serengeti-migration-safari": 596,
+  "machame-route-8-day-adventure-to-conquer-kilimanjaro": 572,
+  "manyara-explorers-delight-3-day-wildlife-and-culture-safari": 591,
+  "mara-moments": 578,
+  "marangu-route-8-day-adventure-to-the-kilimanjaro-summit": 574,
+  "migration-wilderness-wanderlust": 588,
+  "moshi-tuk-tuk-tour-3-day-cultural-and-nature-adventure": 595,
+  "natures-harmony": 579,
+  "ndutu-life-awakens": 562,
+  "ndutu-migration-safari": 573,
+  "peak-perfection": 581,
+  "public-health-trainer": 575,
+  "rescue-kilimanjaro-snow": 563,
+  "rongai-route-kilimanjaro-trek": 568,
+  "shira-discovery": 583,
+  "shira-route-kilimanjaro-trek": 567,
+  "southern-tanzania-discovery": 593,
+  "tanzanian-trio-safari-tarangire-manyara-ngorongoro-expedition": 594,
+  "teaching-awareness-volunteering": 577,
+  "the-island-bliss": 590,
+  "the-safari-oasis": 585,
+  "tree-nursery-development-management": 569,
+  "turquoise-temptation-zanzibar-tour": 589,
+  "umbwe-route-6-day-challenge-to-the-summit-of-mt-kilimanjaro": 570,
+  "usambara-wonders-from-peaks-to-waterfalls": 586,
+  "virunga-vistas": 580,
+  "wild-ecology-conservation-program": 566,
+};
+
+export const HOTEL_SERVICE_IDS: Record<string, number> = {
+  "lions-paw-camp-by-karibu-camps": 152,
+  "ngorongoro-lodge-melia-collection": 154,
+  "ngorongoro-serena-safari-lodge": 153,
+};

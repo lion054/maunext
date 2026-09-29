@@ -1,0 +1,39 @@
+.hero {
+  position: relative; min-height: 54vh; display: flex; align-items: flex-end;
+  color: #fff; padding-bottom: 60px; border-radius: 0 0 24px 24px; overflow: hidden;
+}
+.heroOverlay { position: absolute; inset: 0; background: linear-gradient(rgba(10,20,18,.25), rgba(8,16,15,.82)); }
+.heroInner { position: relative; z-index: 1; max-width: var(--container); margin: 0 auto; padding: 0 24px; width: 100%; }
+.heroInner h1 { color: #fff; font-size: clamp(32px,5vw,54px); margin: 12px 0 10px; }
+.heroInner p { font-size: 16px; color: rgba(255,255,255,.85); margin-bottom: 24px; }
+
+.section { padding: 64px 0; }
+.lede { font-size: 15.5px; line-height: 1.75; color: var(--tanova-text); max-width: 72ch; margin-top: 14px; }
+
+.pillars { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; margin-top: 28px; }
+.pillar { background: #fff; border-radius: var(--radius-lg); padding: 28px; box-shadow: var(--shadow-sm); }
+.pillarNum { font-family: var(--serif); font-size: 14px; color: var(--tanova-accent); font-weight: 700; }
+.pillar h3 { font-size: 17px; margin: 10px 0 10px; color: var(--tanova-primary); }
+.pillar p { font-size: 13.5px; color: var(--tanova-muted); line-height: 1.6; }
+
+.halal {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 36px; align-items: center;
+  background: var(--tanova-ink); border-radius: var(--radius-lg); padding: 48px; margin: 20px 0; color: #fff;
+}
+.halal h2 { color: #fff; margin: 10px 0 14px; }
+.halal p { color: rgba(255,255,255,.75); font-size: 14.5px; line-height: 1.65; margin-bottom: 22px; }
+.halalImg { aspect-ratio: 4/3; border-radius: var(--radius-lg); background-size: cover; background-position: center; }
+
+.stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; padding: 20px 0 40px; }
+.stats div { text-align: center; background: var(--muted-bg); border-radius: var(--radius-lg); padding: 30px; }
+.stats b { display: block; font-family: var(--serif); font-size: 36px; color: var(--tanova-primary); }
+.stats span { font-size: 12.5px; color: var(--tanova-muted); text-transform: uppercase; letter-spacing: .03em; }
+
+.cta { background: var(--tanova-primary); color: #fff; border-radius: var(--radius-lg); padding: 54px; text-align: center; margin: 20px 0 90px; }
+.cta h2 { color: #fff; margin-bottom: 14px; }
+.cta p { color: rgba(255,255,255,.82); max-width: 50ch; margin: 0 auto 22px; }
+
+@media (max-width: 900px) {
+  .pillars, .stats { grid-template-columns: 1fr; }
+  .halal { grid-template-columns: 1fr; padding: 30px; }
+}

@@ -1,49 +1,177 @@
+/* ── Design tokens, ported from the live site's tanova.css ───────────── */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --tanova-primary: #215352;      /* deep teal — headings, primary UI */
+  --tanova-primary-dark: #16403e; /* darker teal for gradients/dark sections */
+  --tanova-ink: #0a1e1d;          /* near-black teal, Sublime backgrounds */
+  --tanova-accent: #9fa217;       /* olive-gold accent */
+  --tanova-gold: #f0d98a;         /* pale gold, used on dark backgrounds */
+  --tanova-text: #3a3f35;
+  --tanova-muted: #61655b; /* darkened from #7a7f72 — that failed WCAG AA (3.97:1) for the small meta/label text it's used on; this hits ~5.8:1 */
+  --tanova-line: rgba(33, 83, 82, 0.08);
+  --tanova-bg: #fbfbf8;
+  --tanova-card: #ffffff;
+
+  --ok-bg: #e6f6ec;   --ok-fg: #146a34;
+  --warn-bg: #fbecd2; --warn-fg: #8a5a0c;
+  --muted-bg: #eef0ea; --muted-fg: #55603f;
+  --off-bg: #f4e3e0;  --off-fg: #9a3227;
+
+  /* Fraunces (variable, optical-size aware) replaces the Georgia fallback stack that
+     shipped in the original prototype — same editorial role (headings, display type)
+     but reads as a considered, current typeface rather than a browser default. */
+  --serif: var(--font-serif), Georgia, "Times New Roman", serif;
+  --sans: var(--font-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+  --container: 1240px;
+
+  /* Spacing scale (4px base) — use for new work; existing hardcoded values are left as-is. */
+  --sp-1: 4px;  --sp-2: 8px;  --sp-3: 12px; --sp-4: 16px; --sp-5: 24px;
+  --sp-6: 32px; --sp-7: 48px; --sp-8: 64px; --sp-9: 96px;
+
+  /* Motion */
+  --ease-out: cubic-bezier(.16,1,.3,1);
+  --ease-in-out: cubic-bezier(.65,0,.35,1);
+  --dur-fast: 0.2s;
+  --dur-base: 0.45s;
+  --dur-slow: 0.8s;
+
+  /* Radius scale — bordered cards, not soft shadow-boxes, but corners land in the
+     range current product UI actually uses (Linear/Stripe/Vercel territory), not the
+     near-0 "printed page" values this briefly held. Near-zero radius plus a static
+     border read as newsprint; this keeps the border language but softens the corner
+     enough to still feel like software. Pill stays pill for buttons/badges. */
+  --radius-sm: 6px;
+  --radius-md: 9px;
+  --radius-lg: 12px;
+  --radius-xl: 18px;
+  --radius-pill: 999px;
+
+  /* Flat-card elevation: a clearly visible thin ink border stands in for the old soft
+     drop shadow. Depth only appears on hover/float, and even then it's neutral and
+     quiet — the border is what defines a card now, not a shadow. */
+  --shadow-line: 0 0 0 1.5px rgba(20,30,28,.22);
+  --shadow-sm: var(--shadow-line);
+  --shadow-md: 0 12px 28px rgba(20,30,28,.14), var(--shadow-line);
+  --shadow-float: 0 24px 48px -12px rgba(10,20,18,.24), var(--shadow-line);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+@media (prefers-reduced-motion: reduce) {
+  :root { --dur-fast: 0.001s; --dur-base: 0.001s; --dur-slow: 0.001s; }
 }
 
-html {
-  height: 100%;
+/* Shared fade-in used when a filtered grid's result set changes (re-triggered by
+   remounting the grid via a React `key` derived from the active filters). Duration
+   uses --dur-base so it collapses under prefers-reduced-motion like everything else. */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-html,
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+html, body { max-width: 100vw; overflow-x: hidden; }
+
 body {
-  max-width: 100vw;
-  overflow-x: hidden;
-}
-
-body {
-  min-height: 100%;
-  display: flex;
-  flex-direction: column;
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-* {
-  box-sizing: border-box;
-  padding: 0;
   margin: 0;
+  font-family: var(--sans);
+  color: var(--tanova-text);
+  background: var(--tanova-bg);
+  -webkit-font-smoothing: antialiased;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
+a { color: inherit; text-decoration: none; transition: color var(--dur-fast) var(--ease-out), background var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out); }
+img { max-width: 100%; display: block; }
+button { font: inherit; cursor: pointer; }
+
+.wrap { max-width: var(--container); margin: 0 auto; padding: 0 24px; }
+
+h1, h2, h3, h4 {
+  font-family: var(--serif);
+  color: var(--tanova-primary);
+  margin: 0;
+  font-weight: 540;
+  letter-spacing: -0.012em;
+}
+/* Larger display type reads tighter, lighter and more considered — a heavier weight
+   at that size fights Fraunces's own display-optical-size character; small headings
+   need the opposite (more weight, less negative tracking) to still read as headings
+   rather than body text. Optical sizing, not just a bigger version of the same rule. */
+h1 { font-weight: 440; letter-spacing: -0.026em; }
+h2 { letter-spacing: -0.018em; }
+h4 { font-weight: 640; letter-spacing: -0.004em; }
+
+/* Sitewide focus ring — buttons/links otherwise fell back to the browser default
+   blue outline, which clashes with the brand and reads as unfinished. */
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+  outline: 2px solid var(--tanova-accent);
+  outline-offset: 2px;
+  border-radius: 2px;
 }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
+/* Editorial kicker, not a brand-colored badge — every light-background eyebrow on the
+   site now reads in the same quiet ink tone instead of each section shouting in olive-
+   gold. Dark-hero eyebrows keep their existing inline gold override; this only changes
+   the (far more common) light-background default. */
+.eyebrow {
+  font-size: 11.5px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.1em; color: var(--tanova-ink);
 }
+
+/* Sentence case, medium weight — the original's all-caps + wide tracking read as
+   brochure-luxury; this keeps the pill shape (still the right register for a travel
+   brand) but drops the shouting for a quieter, more contemporary voice. Hover/press
+   feedback is deliberately punchy (real lift + shadow bloom + a snappy press-down),
+   not a 1px nudge — a barely-there hover is what made the whole site feel inert. */
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 14.5px; font-weight: 600; letter-spacing: -0.006em;
+  padding: 13px 24px; border-radius: var(--radius-pill); border: 1px solid transparent;
+  transition: transform .16s cubic-bezier(.34,1.56,.64,1), box-shadow var(--dur-fast) var(--ease-out), background var(--dur-fast) var(--ease-out), opacity var(--dur-fast) var(--ease-out);
+  white-space: nowrap;
+  will-change: transform;
+}
+.btn:hover { transform: translateY(-3px) scale(1.015); }
+.btn:active { transform: translateY(0) scale(.97); transition-duration: .08s; }
+.btn--primary { background: var(--tanova-accent); color: #16221a; }
+.btn--primary:hover { opacity: .9; box-shadow: 0 10px 24px -8px rgba(159,162,23,.55); }
+.btn--outline { background: transparent; border-color: rgba(255,255,255,.55); color: #fff; }
+.btn--outline:hover { background: rgba(255,255,255,.14); }
+.btn--dark { background: var(--tanova-primary); color: #fff; }
+.btn--dark:hover { background: var(--tanova-primary-dark); box-shadow: 0 10px 24px -8px rgba(33,83,82,.5); }
+
+/* Every stacked section band on the site shares one visible rule at its top edge —
+   the same page-rhythm device the blog masthead/river already uses, now sitewide
+   instead of one page having it and every other page having nothing. */
+.section { padding: var(--sp-9) 0; border-top: 1px solid var(--tanova-line); }
+.section:first-child { border-top: none; }
+@media (max-width: 720px) { .section { padding: var(--sp-7) 0; } }
+
+.badge {
+  font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em;
+  padding: 5px 11px; border-radius: 999px; white-space: nowrap; line-height: 1;
+  display: inline-block;
+}
+.badge--ok { background: var(--ok-bg); color: var(--ok-fg); }
+.badge--warn { background: var(--warn-bg); color: var(--warn-fg); }
+.badge--muted { background: var(--muted-bg); color: var(--muted-fg); }
+.badge--off { background: var(--off-bg); color: var(--off-fg); }
+
+.tier {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em;
+  padding: 5px 11px; border-radius: var(--radius-pill); line-height: 1;
+  box-shadow: 0 2px 10px -2px rgba(8,16,15,.18);
+}
+.tier b { font-weight: 800; opacity: .75; }
+.tier--budget { background: #e8f1f0; color: #215352; }
+.tier--mid    { background: #f6efd3; color: #6f6410; }
+.tier--luxury { background: #16403e; color: #f0d98a; }
+
+.collection-badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em;
+  padding: 6px 12px; border-radius: 999px; line-height: 1; white-space: nowrap;
+  box-shadow: 0 2px 10px -2px rgba(0,0,0,.2);
+}
+.collection-badge--sublime { background: var(--tanova-ink); color: var(--tanova-gold); border: 1px solid rgba(240,217,138,.4); }
+.collection-badge--halal { background: var(--ok-bg); color: var(--ok-fg); }

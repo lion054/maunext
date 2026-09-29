@@ -1,0 +1,54 @@
+.wrap { position: relative; width: 100%; }
+
+.trigger {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 100%;
+  border: 1px solid var(--tanova-line); border-radius: var(--radius-sm); padding: 10px 12px;
+  background: #fff; font-family: inherit; font-size: 14px; color: var(--tanova-ink); text-align: left;
+  transition: border-color var(--dur-fast) var(--ease-out);
+}
+.trigger:hover { border-color: var(--tanova-primary); }
+.trigger:focus-visible { outline: 2px solid var(--tanova-primary); outline-offset: 2px; }
+.triggerBare { border: none; padding: 0; background: none; font-size: 13.5px; }
+.triggerBare:hover { border-color: transparent; }
+
+.value, .placeholder { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.value { color: var(--tanova-ink); }
+.placeholder { color: var(--tanova-muted); }
+.trigger svg { flex-shrink: 0; color: var(--tanova-muted); }
+
+.panel {
+  position: absolute; z-index: 30; top: calc(100% + 8px); left: 0;
+  width: 280px; max-width: 90vw; background: #fff; border-radius: var(--radius-lg); padding: 16px;
+  box-shadow: var(--shadow-float);
+}
+/* Applied when the component measures that a left-anchored panel would overflow the
+   viewport's right edge (common for a right-column field like "Check-out" in a 2-up
+   row, which never stacks to 1 column even at phone widths). See DatePicker.tsx. */
+.panelRight { left: auto; right: 0; }
+
+.rangeHint { font-size: 12px; font-weight: 700; color: var(--tanova-muted); margin: 0 0 12px; text-align: center; }
+
+.head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.head span { font-size: 13.5px; font-weight: 700; color: var(--tanova-primary); }
+.head button {
+  display: flex; align-items: center; justify-content: center; width: 26px; height: 26px;
+  border: none; background: var(--muted-bg); border-radius: 50%; color: var(--tanova-text); cursor: pointer;
+  transition: background var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
+}
+.head button:hover { background: var(--tanova-primary); color: #fff; }
+
+.weekdays { display: grid; grid-template-columns: repeat(7, 1fr); margin-bottom: 4px; }
+.weekdays span { text-align: center; font-size: 10.5px; font-weight: 700; text-transform: uppercase; color: var(--tanova-muted); letter-spacing: .03em; }
+
+.days { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
+.day {
+  aspect-ratio: 1; display: flex; align-items: center; justify-content: center;
+  border: none; background: none; border-radius: 50%; font-size: 12.5px; color: var(--tanova-text); cursor: pointer;
+  transition: background var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
+}
+.day:hover:not(:disabled) { background: var(--muted-bg); }
+.day:disabled { color: var(--tanova-line); cursor: not-allowed; }
+.dayMuted { color: var(--tanova-muted); opacity: .45; }
+.dayToday { color: var(--tanova-accent); font-weight: 800; }
+.daySelected, .daySelected:hover { background: var(--tanova-primary); color: #fff; font-weight: 700; }
+.dayInRange, .dayInRange:hover:not(:disabled) { background: var(--muted-bg); border-radius: 6px; }

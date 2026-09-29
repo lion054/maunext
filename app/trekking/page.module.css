@@ -1,0 +1,108 @@
+.hero {
+  position: relative; min-height: 74vh; display: flex; align-items: flex-end;
+  color: #fff;
+}
+.heroOverlay { position: absolute; inset: 0; background: linear-gradient(rgba(10,20,18,.2), rgba(8,16,15,.8)); }
+.heroInner { position: relative; z-index: 1; max-width: var(--container); margin: 0 auto; padding: 90px 24px 64px; }
+.heroInner p { max-width: 52ch; font-size: 16px; color: rgba(255,255,255,.85); margin: 14px 0 26px; }
+.heroTitle { color: #fff; font-size: clamp(38px, 6.5vw, 74px); line-height: 1; }
+
+/* ── Stat strip: sharp, bordered cells instead of a frosted-glass band over the
+   photo — sits below the hero as its own editorial fact-line. ────────────── */
+.statsRow {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  border: 1.5px solid var(--tanova-ink); border-radius: var(--radius-lg); overflow: hidden;
+  margin-top: -44px; position: relative; z-index: 2; background: #fff;
+}
+.statCell { padding: 22px 20px; text-align: center; border-left: 1.5px solid var(--tanova-ink); }
+.statCell:first-child { border-left: none; }
+.statCell b { display: block; font-family: var(--serif); font-size: clamp(20px, 2.4vw, 28px); color: var(--tanova-primary); }
+.statCell span { font-size: 11px; color: var(--tanova-muted); text-transform: uppercase; letter-spacing: .05em; }
+
+/* ── Intro + Mount Meru cross-sell ────────────────────────────────────────── */
+.intro { padding: 76px 0 20px; display: grid; grid-template-columns: 1.1fr 1fr; gap: 48px; align-items: start; }
+.intro p { font-size: 15px; line-height: 1.7; color: var(--tanova-text); margin-top: 14px; }
+.intro p + p { margin-top: 10px; }
+.crossSell {
+  display: flex; gap: 20px; align-items: center; border: 1.5px solid var(--tanova-ink);
+  border-radius: var(--radius-lg); padding: 18px; text-decoration: none;
+  transition: transform var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out);
+}
+.crossSell:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); border-color: var(--tanova-primary); }
+.crossSell:hover .crossSellImg { transform: scale(1.05); }
+.crossSellImg { width: 130px; aspect-ratio: 4/3; object-fit: cover; border-radius: var(--radius-md); flex-shrink: 0; transition: transform .4s var(--ease-out); }
+.crossSell h3 { font-size: 18px; margin: 6px 0 8px; }
+.crossSell p { font-size: 13px; color: var(--tanova-muted); line-height: 1.5; margin: 0; }
+.crossSellLink { display: inline-block; margin-top: 10px; font-size: 12.5px; font-weight: 700; color: var(--tanova-accent); transition: transform var(--dur-fast) var(--ease-out); }
+.crossSell:hover .crossSellLink { transform: translateX(4px); }
+
+/* ── Route Explorer: one unified list — name, real description, difficulty,
+   duration and success rate all on the same row, instead of the same six routes
+   spread across a card grid, a separate bar chart, and a separate persona picker. */
+.explorerLede { font-size: 14.5px; color: var(--tanova-muted); max-width: 68ch; margin: 12px 0 0; line-height: 1.6; }
+.explorer { display: flex; flex-direction: column; gap: 14px; padding-bottom: 20px; }
+.explorerRow {
+  display: grid; grid-template-columns: 1.3fr 1fr auto; align-items: center; gap: 18px 28px;
+  border: 1.5px solid var(--tanova-ink); border-radius: var(--radius-lg); padding: 22px 26px;
+  transition: transform var(--dur-fast) var(--ease-out), background var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out);
+}
+.explorerRow:hover { transform: translateY(-4px); background: var(--muted-bg); box-shadow: var(--shadow-md); border-color: var(--tanova-primary); }
+.explorerRow:hover .explorerCta { color: var(--tanova-primary); }
+.explorerHead { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; grid-column: 1 / 2; }
+.explorerName { font-family: var(--serif); font-size: 20px; color: var(--tanova-primary); }
+.explorerTag { font-size: 10.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; color: var(--tanova-accent); }
+.explorerDeparture {
+  font-size: 11px; font-weight: 700; color: var(--ok-fg); background: var(--ok-bg);
+  padding: 3px 9px; border-radius: var(--radius-pill); white-space: nowrap;
+}
+.explorerDesc { grid-column: 1 / 2; font-size: 13.5px; color: var(--tanova-muted); line-height: 1.55; margin: 0; max-width: 52ch; }
+.explorerMeta { grid-column: 2 / 3; display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
+.explorerDays { font-size: 12.5px; font-weight: 700; color: var(--tanova-text); }
+.explorerBarRow { grid-column: 3 / 4; display: flex; flex-direction: column; align-items: flex-end; gap: 6px; min-width: 160px; }
+.explorerBarTrack { width: 140px; height: 8px; border-radius: var(--radius-pill); background: var(--muted-bg); overflow: hidden; }
+.explorerBarFill { height: 100%; border-radius: var(--radius-pill); transition: width 1s var(--ease-out); }
+.explorerBarFill--moderate { background: var(--ok-fg); }
+.explorerBarFill--challenging { background: var(--warn-fg); }
+.explorerBarFill--veryhard { background: var(--off-fg); }
+.explorerPct { font-size: 11.5px; font-weight: 700; color: var(--tanova-muted); }
+.explorerCta { grid-column: 1 / 4; font-size: 12.5px; font-weight: 700; color: var(--tanova-accent); padding-top: 12px; border-top: 1px solid var(--tanova-line); margin-top: 2px; }
+
+.routeDiff { font-size: 10px; font-weight: 700; text-transform: uppercase; padding: 4px 10px; border-radius: var(--radius-pill); white-space: nowrap; }
+.routeDiff--moderate { background: var(--ok-bg); color: var(--ok-fg); }
+.routeDiff--challenging { background: var(--warn-bg); color: var(--warn-fg); }
+.routeDiff--veryhard { background: var(--off-bg); color: var(--off-fg); }
+
+/* ── Essential reading strip ──────────────────────────────────────────────── */
+.reading { padding: 60px 0 0; }
+.readingLink {
+  display: flex; gap: 24px; align-items: center; border: 1.5px solid var(--tanova-ink); border-radius: var(--radius-lg); padding: 22px; text-decoration: none; overflow: hidden;
+  transition: transform var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out);
+}
+.readingLink:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); border-color: var(--tanova-primary); }
+.readingLink:hover .readingImg { transform: scale(1.05); }
+.readingImg { width: 220px; aspect-ratio: 3/2; object-fit: cover; border-radius: var(--radius-md); flex-shrink: 0; transition: transform .4s var(--ease-out); }
+.readingLink h3 { font-size: 18px; margin: 6px 0 8px; }
+.readingLink p { font-size: 13.5px; color: var(--tanova-muted); line-height: 1.5; margin: 0; }
+
+/* ── Closing crew CTA ─────────────────────────────────────────────────────── */
+.crew { background: var(--tanova-primary); color: #fff; border-radius: var(--radius-xl); padding: 54px; display: flex; align-items: center; gap: 40px; margin: 64px 0 90px; flex-wrap: wrap; }
+.crew h2 { color: #fff; }
+.crew p { color: rgba(255,255,255,.82); max-width: 48ch; margin-top: 12px; }
+.crewActions { display: flex; gap: 12px; flex-wrap: wrap; }
+
+@media (max-width: 900px) {
+  .intro { grid-template-columns: 1fr; }
+  .statsRow { grid-template-columns: 1fr 1fr; margin-top: -32px; }
+  .statCell:nth-child(3) { border-left: none; }
+  .explorerRow { grid-template-columns: 1fr; }
+  .explorerHead, .explorerDesc, .explorerMeta, .explorerBarRow, .explorerCta { grid-column: 1 / 2; }
+  .explorerBarRow { align-items: flex-start; }
+  .explorerBarTrack { width: 100%; }
+  .readingLink { flex-direction: column; align-items: stretch; }
+  .readingImg { width: 100%; aspect-ratio: 16/9; }
+}
+@media (max-width: 620px) {
+  .statsRow { grid-template-columns: 1fr 1fr; }
+  .crossSell { flex-direction: column; align-items: stretch; }
+  .crossSellImg { width: 100%; aspect-ratio: 16/9; }
+}

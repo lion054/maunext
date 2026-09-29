@@ -1,0 +1,57 @@
+/* NYT-style journal front: flat masthead, one lead story, a rule-separated "river"
+   of headlines — no shadowed cards, no rounded photo tiles, minimal color. The type
+   and the hairline rules do the work instead of elevation. */
+
+.masthead {
+  padding: 48px 0 6px; display: flex; align-items: baseline; justify-content: space-between;
+  gap: 16px; flex-wrap: wrap; border-bottom: 3px solid var(--tanova-ink);
+}
+.mastheadTitle { font-family: var(--serif); font-weight: 600; font-size: clamp(32px, 5vw, 52px); letter-spacing: -0.02em; color: var(--tanova-ink); }
+.mastheadDate { font-size: 12.5px; color: var(--tanova-muted); text-transform: uppercase; letter-spacing: .06em; padding-bottom: 10px; }
+.mastheadDek { font-size: 14.5px; color: var(--tanova-muted); max-width: 62ch; margin: 14px 0 28px; line-height: 1.6; }
+
+.sectionNav { display: flex; align-items: center; flex-wrap: wrap; padding-bottom: 14px; }
+.navDivider { color: var(--tanova-line); margin: 0 10px; font-size: 12px; }
+.navItem {
+  background: none; border: none; cursor: pointer; padding: 4px 0;
+  font-size: 12.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; color: var(--tanova-muted);
+}
+.navItem:hover { color: var(--tanova-text); }
+.navItemActive { color: var(--tanova-ink); box-shadow: inset 0 -2px 0 var(--tanova-accent); }
+.rule { border: none; border-top: 1px solid var(--tanova-line); margin: 0 0 40px; }
+
+/* Lead story — full-width, large serif headline, no card chrome. */
+.lead { display: grid; grid-template-columns: 1.3fr 1fr; gap: 36px; align-items: center; padding-bottom: 44px; margin-bottom: 44px; border-bottom: 1px solid var(--tanova-line); color: inherit; }
+.leadImg { aspect-ratio: 16/10; background-size: cover; background-position: center; }
+.leadImgFallback { aspect-ratio: 16/10; background: var(--tanova-ink); display: flex; align-items: center; justify-content: center; }
+.leadImgFallback b { color: var(--tanova-gold); font-family: var(--serif); font-size: 19px; border: 2px solid rgba(240,217,138,.5); padding: 8px 16px; }
+.leadBody { display: flex; flex-direction: column; gap: 10px; }
+.leadTitle { font-size: clamp(24px, 3vw, 34px); font-weight: 540; letter-spacing: -0.015em; line-height: 1.15; }
+.lead:hover .leadTitle { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 4px; }
+.leadMeta { font-size: 12.5px; color: var(--tanova-muted); }
+
+.kicker { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; color: var(--tanova-accent); }
+
+/* The river: rule-topped headline items, thumbnail-led, three to a row on desktop —
+   the newspaper-page reading pattern instead of a boxed grid of cards. */
+.river { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0 32px; padding-bottom: 90px; animation: fadeInUp var(--dur-base) var(--ease-out) both; }
+.riverItem {
+  display: flex; flex-direction: column; gap: 12px; padding: 22px 0;
+  border-top: 1px solid var(--tanova-line); color: inherit;
+}
+.riverImg { aspect-ratio: 16/10; background-size: cover; background-position: center; }
+.riverImgFallback { aspect-ratio: 16/10; background: var(--tanova-ink); display: flex; align-items: center; justify-content: center; }
+.riverImgFallback b { color: var(--tanova-gold); font-family: var(--serif); font-size: 14px; border: 1.5px solid rgba(240,217,138,.5); padding: 6px 12px; }
+.riverBody { display: flex; flex-direction: column; gap: 6px; }
+.riverTitle { font-size: 17px; font-weight: 540; letter-spacing: -0.01em; line-height: 1.28; }
+.riverItem:hover .riverTitle { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+.riverMeta { font-size: 11.5px; color: var(--tanova-muted); }
+
+@media (max-width: 900px) {
+  .lead { grid-template-columns: 1fr; gap: 20px; }
+  .river { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 620px) {
+  .river { grid-template-columns: 1fr; }
+  .masthead { padding-top: 32px; }
+}

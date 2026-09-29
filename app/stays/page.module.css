@@ -1,0 +1,23 @@
+.head { padding: 56px 0 40px; text-align: center; }
+.head p { color: var(--tanova-muted); max-width: 52ch; margin: 12px auto 0; }
+.grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; padding-bottom: 80px; animation: fadeInUp var(--dur-base) var(--ease-out) both; }
+
+.filterBar {
+  display: flex; gap: 14px; flex-wrap: wrap; align-items: center;
+  background: #fff; border-radius: var(--radius-md); padding: 18px 20px; margin-bottom: 20px;
+  box-shadow: var(--shadow-sm);
+}
+.filterField { display: flex; flex-direction: column; gap: 6px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--tanova-muted); }
+.filterField select { border: 1px solid var(--tanova-line); border-radius: var(--radius-sm); padding: 9px 12px; font-size: 13.5px; font-family: inherit; text-transform: none; letter-spacing: normal; font-weight: 500; color: var(--tanova-text); min-width: 160px; }
+.checkField { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--tanova-text); font-weight: 600; align-self: center; }
+.filterClear { margin-left: auto; align-self: center; background: none; border: none; color: var(--tanova-accent); font-size: 12.5px; font-weight: 700; cursor: pointer; }
+.resultCount { font-size: 13px; color: var(--tanova-muted); margin-bottom: 18px; }
+.noResults { font-size: 14px; color: var(--tanova-muted); padding: 40px 0 90px; }
+
+@media (max-width: 900px) { .grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 620px) {
+  .grid { grid-template-columns: 1fr; }
+  .filterBar { flex-direction: column; align-items: stretch; }
+  .filterField select { min-width: 0; width: 100%; }
+  .filterClear { margin-left: 0; }
+}

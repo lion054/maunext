@@ -1,0 +1,55 @@
+.wizard { max-width: 900px; margin: 0 auto; padding: 64px 0 100px; }
+.step { text-align: center; }
+.step p { color: var(--tanova-muted); margin: 12px 0 40px; }
+
+.banner {
+  background: var(--ok-bg); color: var(--ok-fg); border-radius: var(--radius-sm); padding: 14px 20px;
+  font-size: 13.5px; font-weight: 600; margin-bottom: 32px; text-align: center;
+}
+
+.cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.card {
+  border: 2px solid var(--tanova-line); border-radius: var(--radius-md); padding: 22px 18px; text-align: left;
+  background: #fff; display: flex; flex-direction: column; gap: 8px; transition: border-color .2s, transform .2s;
+}
+.card:hover { transform: translateY(-2px); }
+.card.active { border-color: var(--tanova-accent); box-shadow: 0 10px 24px -14px rgba(159,162,23,.5); }
+.icon { font-size: 26px; }
+.cardTitle { font-family: var(--serif); color: var(--tanova-primary); font-size: 16px; }
+.cardSub { font-size: 12.5px; color: var(--tanova-muted); line-height: 1.4; }
+
+.actions { display: flex; justify-content: center; align-items: center; gap: 16px; margin-top: 44px; }
+.back { background: none; border: none; color: var(--tanova-muted); font-size: 13px; font-weight: 600; cursor: pointer; padding: 10px; }
+.back:hover { color: var(--tanova-primary); }
+
+.dateRow { display: grid; grid-template-columns: 1fr 1fr 120px; gap: 16px; text-align: left; max-width: 640px; margin: 0 auto; }
+.field { display: flex; flex-direction: column; gap: 6px; font-size: 12.5px; font-weight: 700; color: var(--tanova-text); }
+.field input[type="number"] { border: 1px solid var(--tanova-line); border-radius: var(--radius-sm); padding: 10px 12px; font-size: 14px; font-family: inherit; }
+
+.aiNote { font-size: 12px; color: var(--tanova-muted); max-width: 46ch; margin: 16px auto 0; }
+
+.packageTabs { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin: 28px 0 20px; }
+.packageTab {
+  border: 1px solid var(--tanova-line); background: #fff; border-radius: var(--radius-pill);
+  padding: 8px 18px; font-size: 12.5px; font-weight: 700; color: var(--tanova-muted); cursor: pointer;
+  transition: border-color var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out), background var(--dur-fast) var(--ease-out);
+}
+.packageTab:hover { border-color: var(--tanova-primary); color: var(--tanova-primary); }
+.packageTab.active { background: var(--tanova-primary); border-color: var(--tanova-primary); color: #fff; }
+
+.dayList { text-align: left; display: flex; flex-direction: column; gap: 14px; }
+.dayCard { background: #fff; border-radius: var(--radius-lg); padding: 20px; box-shadow: var(--shadow-sm); }
+.dayHead { display: flex; align-items: baseline; gap: 12px; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid var(--tanova-line); }
+.dayNum { font-family: var(--serif); font-size: 16px; color: var(--tanova-primary); }
+.dayDate { font-size: 12px; color: var(--tanova-muted); }
+.dayEmpty { font-size: 13px; color: var(--tanova-muted); font-style: italic; margin: 0; }
+.activityRow { display: flex; gap: 14px; align-items: flex-start; }
+.activityRow + .activityRow { margin-top: 12px; }
+.activityImg { border-radius: var(--radius-sm); object-fit: cover; flex-shrink: 0; }
+.activityRow b { display: block; font-size: 14px; color: var(--tanova-primary); margin-bottom: 4px; }
+.activityRow p { font-size: 12.5px; color: var(--tanova-muted); line-height: 1.5; margin: 0; }
+
+@media (max-width: 700px) {
+  .cards { grid-template-columns: 1fr; }
+  .dateRow { grid-template-columns: 1fr; }
+}

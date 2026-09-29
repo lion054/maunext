@@ -1,0 +1,17 @@
+.head { padding: 70px 0 20px; max-width: 72ch; }
+.head p { font-size: 15.5px; line-height: 1.75; color: var(--tanova-text); margin-top: 14px; }
+
+.section { padding: 40px 0; }
+.grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; margin-top: 28px; }
+.card { background: #fff; border-radius: var(--radius-md); padding: 22px; box-shadow: var(--shadow-sm); }
+.card b { font-family: var(--serif); font-size: 13px; color: var(--tanova-accent); font-weight: 700; }
+.card h4 { font-size: 14.5px; margin: 8px 0 8px; color: var(--tanova-primary); }
+.card p { font-size: 13px; color: var(--tanova-muted); line-height: 1.6; }
+
+.cta { background: var(--tanova-primary); color: #fff; border-radius: var(--radius-lg); padding: 54px; text-align: center; margin: 40px 0 90px; }
+.cta h2 { color: #fff; margin-bottom: 14px; }
+.cta p { color: rgba(255,255,255,.82); max-width: 50ch; margin: 0 auto 22px; }
+
+@media (max-width: 700px) {
+  .grid { grid-template-columns: 1fr; }
+}

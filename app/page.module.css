@@ -1,150 +1,261 @@
-.page {
-  --background: #fafafa;
-  --foreground: #fff;
-
-  --text-primary: #000;
-  --text-secondary: #666;
-
-  --button-primary-hover: #383838;
-  --button-secondary-hover: #f2f2f2;
-  --button-secondary-border: #ebebeb;
-
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-geist-sans);
-  background-color: var(--background);
+.hero {
+  position: relative; display: flex; align-items: flex-end;
+  min-height: 100vh; min-height: 100dvh;
+  color: #fff; padding-bottom: clamp(28px, 5vh, 56px);
 }
-
-.main {
-  display: flex;
-  flex: 1;
-  width: 100%;
-  max-width: 800px;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: space-between;
-  background-color: var(--foreground);
-  padding: 120px 60px;
+.scrollCue {
+  position: absolute; left: 50%; bottom: 28px; transform: translateX(-50%);
+  display: none; flex-direction: column; align-items: center; gap: 10px; z-index: 1; pointer-events: none;
+  color: rgba(255,255,255,.75); font-size: 10.5px; text-transform: uppercase; letter-spacing: .18em;
 }
+.scrollCue i { display: block; width: 1px; height: 34px; background: linear-gradient(rgba(255,255,255,.8), rgba(255,255,255,0)); font-style: normal; animation: scrollCueMove 1.8s ease-in-out infinite; }
+@keyframes scrollCueMove { 0%,100% { opacity: .3; transform: scaleY(.7); } 50% { opacity: 1; transform: scaleY(1); } }
+@media (min-width: 1320px) { .scrollCue { display: flex; } }
 
-.intro {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  text-align: left;
-  gap: 24px;
+.heroOverlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(rgba(10,20,18,.25), rgba(8,16,15,.78));
 }
+.heroInner { position: relative; z-index: 1; max-width: var(--container); margin: 0 auto; padding: 0 24px; width: 100%; }
+.heroEyebrow { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .16em; color: var(--tanova-gold); margin-bottom: clamp(8px, 1.5vh, 14px); }
+.heroTitle { font-family: var(--serif); font-size: clamp(36px, min(7vw, 8vh), 88px); line-height: 1.02; color: #fff; margin: 0; }
+.heroTitle em { font-style: italic; color: var(--tanova-gold); }
+.heroSub { font-size: clamp(15px, 1.8vh, 18px); line-height: 1.5; max-width: 46ch; margin: clamp(12px, 2.2vh, 22px) 0 clamp(16px, 3vh, 34px); color: rgba(255,255,255,.85); }
+.heroSub b { font-style: italic; color: var(--tanova-gold); font-weight: 600; }
+.heroActions { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: clamp(18px, 3.5vh, 40px); }
+.trustBar { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; font-size: 13.5px; color: rgba(255,255,255,.8); }
+.stars { color: var(--tanova-gold); display: inline-flex; gap: 2px; }
+.divider { opacity: .4; }
 
-.intro h1 {
-  max-width: 320px;
-  font-size: 40px;
-  font-weight: 600;
-  line-height: 48px;
-  letter-spacing: -2.4px;
-  text-wrap: balance;
-  color: var(--text-primary);
+.section h2 { font-size: clamp(28px, 3.5vw, 40px); margin-bottom: 14px; }
+.section h2 em { font-style: italic; color: var(--tanova-accent); }
+.sectionHead { max-width: 620px; margin: 0 auto 48px; text-align: center; }
+.sectionHead p { color: var(--tanova-muted); font-size: 15.5px; margin-top: 10px; }
+.sectionHeadLeft { max-width: 620px; margin-bottom: 32px; }
+
+.grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; }
+.tourCard { border-radius: var(--radius-lg); overflow: hidden; background: #fff; box-shadow: var(--shadow-sm); }
+.tourImg { aspect-ratio: 4/3; position: relative; background-size: cover; background-position: center; }
+.tourImg::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, rgba(10,20,18,.55), transparent 55%); }
+.tourImg span { position: absolute; z-index: 1; bottom: 14px; left: 16px; color: #fff; font-family: var(--serif); font-size: 13px; opacity: .9; }
+.tourBody { padding: 20px; }
+.tourEyebrow { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--tanova-accent); font-weight: 700; }
+.tourTitle { font-family: var(--serif); font-size: 19px; color: var(--tanova-primary); margin: 8px 0 10px; }
+.tourDesc { font-size: 13.5px; color: var(--tanova-muted); line-height: 1.5; }
+.tourFoot { display: flex; justify-content: space-between; align-items: center; margin-top: 16px; }
+.tourPrice { font-weight: 800; color: var(--tanova-primary); }
+
+/* ── Discover Experiences grid ─────────────────────────────────── */
+.expGrid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.expCard {
+  position: relative; aspect-ratio: 3/4; border-radius: var(--radius-md); overflow: hidden;
+  display: flex; flex-direction: column; justify-content: flex-end; padding: 16px; color: #fff;
+  border: 1.5px solid var(--tanova-ink);
+  transition: transform var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out);
 }
+.expCard:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); border-color: var(--tanova-gold); }
+.expImg { position: absolute; inset: 0; background-size: cover; background-position: center; transition: transform .5s var(--ease-out); }
+.expCard:hover .expImg { transform: scale(1.08); }
+.expCard::before { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, rgba(8,16,15,.85), transparent 60%); }
+.expTag, .expTitle { position: relative; z-index: 1; }
+.expTag { font-size: 10.5px; text-transform: uppercase; letter-spacing: .06em; color: var(--tanova-gold); margin-bottom: 4px; }
+.expTitle { font-family: var(--serif); font-size: 16px; transition: transform var(--dur-fast) var(--ease-out); }
+.expCard:hover .expTitle { transform: translateX(3px); }
 
-.intro p {
-  max-width: 440px;
-  font-size: 18px;
-  line-height: 32px;
-  text-wrap: balance;
-  color: var(--text-secondary);
-}
-
-.intro a {
-  font-weight: 500;
-  color: var(--text-primary);
-}
-
-.ctas {
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  max-width: 440px;
+/* ── Bento stats grid ──────────────────────────────────────────── */
+/* Explicit named areas — deliberately composed so every breakpoint tiles
+   with zero gaps. (The previous version placed only 2 of 6 items explicitly
+   and let the rest auto-flow, which left a dead cell in the grid at both the
+   desktop and tablet widths.) */
+.bento {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr 1fr;
+  grid-template-rows: minmax(150px, 1fr) minmax(150px, 1fr) minmax(120px, auto);
+  grid-template-areas:
+    "feature stat1 stat2"
+    "feature img2  stat3"
+    "feature cta   cta";
   gap: 16px;
-  font-size: 14px;
+}
+.bentoImg {
+  border-radius: var(--radius-lg); background-size: cover; background-position: center; overflow: hidden;
+  padding: 20px; display: flex; flex-direction: column; justify-content: flex-end;
+  color: #fff; position: relative; border: 1.5px solid var(--tanova-ink);
+}
+.bentoImg::before { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(to top, rgba(8,16,15,.75), transparent 65%); }
+.bentoImg::after { content: ""; position: absolute; inset: 0; background-size: cover; background-position: center; background-image: inherit; transition: transform .6s var(--ease-out); }
+.bentoImg:hover::after { transform: scale(1.06); }
+.bentoImg > * { position: relative; z-index: 2; }
+.bentoImg h3 { color: #fff; font-size: 19px; margin-top: 6px; }
+.bentoFeature { grid-area: feature; }
+.bentoImg2 { grid-area: img2; }
+.bentoStat {
+  background: var(--muted-bg); border-radius: var(--radius-lg); padding: 22px; display: flex; flex-direction: column; justify-content: center; gap: 6px;
+  border: 1.5px solid var(--tanova-ink);
+}
+.bentoStat::before { content: ""; display: block; width: 26px; height: 2px; border-radius: 2px; background: var(--tanova-accent); margin-bottom: 2px; }
+.bentoStat b { font-family: var(--serif); font-size: 30px; color: var(--tanova-primary); }
+.bentoStat b i { display: inline-flex; align-items: center; font-style: normal; color: var(--tanova-accent); margin-left: 3px; }
+.bentoStat span { font-size: 11.5px; color: var(--tanova-muted); text-transform: uppercase; letter-spacing: .03em; }
+.bentoStat1 { grid-area: stat1; }
+.bentoStat2 { grid-area: stat2; }
+.bentoStat3 { grid-area: stat3; }
+.bentoCta {
+  grid-area: cta; border-radius: var(--radius-lg); padding: 24px; background: var(--tanova-ink); color: #fff;
+  display: flex; flex-direction: column; justify-content: center; gap: 4px; border: 1.5px solid var(--tanova-ink);
+  transition: transform var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out);
+}
+.bentoCta:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); border-color: var(--tanova-gold); }
+.bentoCta:hover .bentoCtaLink { transform: translateX(4px); }
+.bentoCtaLink { transition: transform var(--dur-fast) var(--ease-out); display: inline-block; }
+.bentoCta h3 { color: #fff; font-size: 22px; margin: 4px 0 2px; }
+.bentoCtaLink { font-size: 13px; font-weight: 700; color: var(--tanova-gold); }
+
+/* ── Handpicked Tours band ────────────────────────────────────── */
+.toursBand { background: var(--tanova-ink); padding: 88px 0; }
+.toursHead { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; flex-wrap: wrap; margin-bottom: 32px; }
+.toursHead h2 { color: #fff; }
+.toursGrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.tourTile {
+  position: relative; aspect-ratio: 4/3.2; border-radius: var(--radius-md); overflow: hidden; background-size: cover; background-position: center;
+  display: flex; flex-direction: column; justify-content: flex-end; padding: 18px; color: #fff;
+  border: 1.5px solid rgba(255,255,255,.15);
+  transition: transform var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out);
+}
+.tourTile:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); border-color: var(--tanova-gold); }
+.tourTile::before { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, rgba(8,16,15,.85), transparent 55%); }
+.tourTile::after { content: ""; position: absolute; inset: 0; background-size: cover; background-position: center; background-image: inherit; transition: transform .5s var(--ease-out); }
+.tourTile:hover::after { transform: scale(1.08); }
+.tourTileBadges { position: absolute; top: 14px; left: 14px; z-index: 1; }
+.tourTileTitle, .tourTileMeta { position: relative; z-index: 1; }
+.tourTileTitle { font-family: var(--serif); font-size: 17px; margin-bottom: 6px; }
+.tourTileMeta { font-size: 11.5px; opacity: .75; border-top: 1px solid rgba(255,255,255,.2); padding-top: 8px; margin-top: 4px; }
+
+/* ── Signature Collections (Sublime / Halal) ─────────────────────── */
+.collectionsBand { padding: 88px 0; background: var(--tanova-bg); }
+.collectionsGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.collectionCard {
+  position: relative; aspect-ratio: 4/5; border-radius: var(--radius-lg); overflow: hidden;
+  display: flex; align-items: flex-end;
+}
+.collectionImg {
+  position: absolute; inset: 0; background-size: cover; background-position: center;
+  transition: transform .5s ease;
+}
+.collectionCard:hover .collectionImg { transform: scale(1.05); }
+.collectionOverlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(8,16,15,.92) 10%, rgba(8,16,15,.25) 65%, rgba(8,16,15,.1)); }
+.collectionBody { position: relative; z-index: 1; padding: 34px; color: #fff; }
+.collectionBadge { margin-bottom: 16px; }
+.collectionTitle { font-family: var(--serif); font-size: clamp(22px, 2.6vw, 28px); line-height: 1.2; margin-bottom: 12px; max-width: 22ch; }
+.collectionDesc { font-size: 14px; line-height: 1.6; color: rgba(255,255,255,.82); max-width: 42ch; margin-bottom: 16px; }
+.collectionMeta { display: flex; gap: 8px; align-items: center; font-size: 12.5px; color: var(--tanova-gold); font-weight: 700; margin-bottom: 22px; }
+.collectionMeta span:nth-child(2) { opacity: .5; }
+
+@media (max-width: 900px) {
+  .collectionsGrid { grid-template-columns: 1fr; }
+  .collectionCard { aspect-ratio: 4/4.4; }
 }
 
-.ctas a {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 40px;
-  padding: 0 16px;
-  border-radius: 128px;
-  border: 1px solid transparent;
-  transition: 0.2s;
-  cursor: pointer;
-  width: fit-content;
-  font-weight: 500;
+/* ── Tanzania in Motion ────────────────────────────────────────── */
+.motionGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
+.motionLede { color: var(--tanova-muted); font-size: 15px; margin: 14px 0 26px; max-width: 42ch; }
+.motionList { list-style: none; margin: 0 0 28px; padding: 0; }
+.motionList li { display: flex; gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--tanova-line); }
+.motionLetter { font-size: 11px; font-weight: 700; color: var(--tanova-accent); padding-top: 2px; }
+.motionList b { display: block; font-size: 14.5px; color: var(--tanova-primary); }
+.motionList small { color: var(--tanova-muted); font-size: 12.5px; }
+.videoCard { position: relative; aspect-ratio: 4/3; border-radius: var(--radius-lg); background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; }
+.playBtn {
+  width: 60px; height: 60px; border-radius: 50%; background: rgba(255,255,255,.92); border: none;
+  display: flex; align-items: center; justify-content: center; color: var(--tanova-primary); box-shadow: 0 10px 30px -10px rgba(0,0,0,.4);
 }
 
-a.primary {
-  background: var(--text-primary);
-  color: var(--background);
-  gap: 8px;
+/* ── Sustainability impact ────────────────────────────────────── */
+.impactGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
+.impactImg { aspect-ratio: 4/3; border-radius: var(--radius-lg); background-size: cover; background-position: center; }
+.impactStats { display: flex; gap: 32px; margin: 22px 0 26px; flex-wrap: wrap; }
+.impactStats b { display: block; font-family: var(--serif); font-size: 28px; color: var(--tanova-primary); }
+.impactStats span { font-size: 12px; color: var(--tanova-muted); }
+
+/* ── Reviews ───────────────────────────────────────────────────── */
+.reviewsRow { display: grid; grid-template-columns: 1fr repeat(3, 1.3fr); gap: 16px; align-items: stretch; }
+.taWidget { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; text-align: center; padding: 20px; }
+.taWidget b { font-size: 15px; letter-spacing: .04em; }
+.taCircles { display: flex; gap: 3px; color: var(--ok-fg); font-size: 14px; }
+.taWidget span { font-size: 12px; color: var(--tanova-muted); }
+.taWidget small { font-weight: 700; color: #34e0a1; }
+.reviewCard { background: #fff; border-radius: var(--radius-md); padding: 20px; box-shadow: var(--shadow-sm); display: flex; flex-direction: column; gap: 8px; }
+.reviewHead { display: flex; align-items: center; gap: 10px; font-size: 12.5px; }
+.reviewAvatar {
+  width: 34px; height: 34px; border-radius: 50%; background: var(--tanova-primary); color: #fff; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center; font-size: 11.5px; font-weight: 800;
+}
+.reviewHead b { color: var(--tanova-primary); display: block; }
+.reviewHead span { color: var(--tanova-muted); }
+.reviewStars { color: var(--tanova-gold); display: inline-flex; gap: 1px; }
+.reviewTitle { font-family: var(--serif); font-size: 14.5px; color: var(--tanova-primary); margin: 0; }
+.reviewCard p { font-size: 13px; color: var(--tanova-text); line-height: 1.5; }
+
+/* ── Accreditation logo grid ───────────────────────────────────── */
+.logoGrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.logoCard { background: var(--muted-bg); border-radius: var(--radius-md); padding: 26px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.logoCard img { height: 34px; width: auto; object-fit: contain; }
+.logoCard b { font-size: 13.5px; color: var(--tanova-primary); }
+.logoCard span { font-size: 11.5px; color: var(--tanova-muted); }
+
+/* ── Journal cards ─────────────────────────────────────────────── */
+.postCard {
+  display: block; border-radius: var(--radius-lg); overflow: hidden; background: #fff; box-shadow: var(--shadow-sm);
+  transition: transform var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast) var(--ease-out);
+}
+.postCard:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+.postImg { aspect-ratio: 16/10; position: relative; background-size: cover; background-position: center; overflow: hidden; }
+.postImg::after { content: ""; position: absolute; inset: 0; background-size: cover; background-position: center; background-image: inherit; transition: transform .5s var(--ease-out); }
+.postCard:hover .postImg::after { transform: scale(1.08); }
+.postImgFallback { aspect-ratio: 16/10; position: relative; background: #16403e; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 8px; }
+.postImgFallback b { color: #fff; font-family: var(--serif); font-size: 20px; border: 2px solid rgba(255,255,255,.5); padding: 8px 16px; transform: rotate(-3deg); }
+.postTag { position: absolute; top: 12px; left: 12px; z-index: 1; background: var(--tanova-accent); color: #16221a; font-size: 10px; font-weight: 700; text-transform: uppercase; padding: 4px 10px; border-radius: 999px; }
+.postDate { font-size: 11px; color: var(--tanova-muted); text-transform: uppercase; letter-spacing: .04em; }
+.postTitle { font-family: var(--serif); font-size: 16px; color: var(--tanova-primary); margin: 8px 0 12px; line-height: 1.3; }
+.postReadMore { display: inline-block; color: var(--tanova-accent); font-weight: 700; font-size: 13px; transition: transform var(--dur-fast) var(--ease-out); }
+.postCard:hover .postReadMore { transform: translateX(4px); }
+
+/* ── Closing CTA ───────────────────────────────────────────────── */
+.closeCta { position: relative; padding: 120px 0; display: flex; align-items: center; justify-content: center; min-height: auto; color: #fff; text-align: center; }
+.closeCtaOverlay { position: absolute; inset: 0; background: rgba(8,16,15,.72); }
+.closeCtaInner { position: relative; z-index: 1; max-width: 720px; }
+.closeCtaTitle { color: #fff; font-size: clamp(28px, 4.5vw, 42px); margin-bottom: 20px; }
+.closeCtaTitle em { font-style: italic; color: var(--tanova-gold); }
+.closeCtaInner p { color: rgba(255,255,255,.8); margin-bottom: 26px; }
+
+@media (max-width: 900px) {
+  .grid3, .expGrid, .toursGrid, .logoGrid { grid-template-columns: 1fr 1fr; }
+  .bento {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto auto auto;
+    grid-template-areas:
+      "feature feature"
+      "stat1   stat2"
+      "img2    stat3"
+      "cta     cta";
+  }
+  .motionGrid, .impactGrid { grid-template-columns: 1fr; }
+  .reviewsRow { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 620px) {
+  .grid3, .expGrid, .toursGrid, .logoGrid, .reviewsRow { grid-template-columns: 1fr; }
+  .bento { grid-template-columns: 1fr; grid-template-rows: none; grid-template-areas: none; }
 }
 
-a.secondary {
-  border-color: var(--button-secondary-border);
+/* Short viewports (small laptop windows, landscape phones): compress the
+   hero stack further so the search bar never gets pushed past the fold. */
+@media (max-height: 720px) {
+  .hero { padding-bottom: 20px; }
+  .heroEyebrow { margin-bottom: 6px; }
+  .heroSub { margin: 8px 0 14px; }
+  .heroActions { margin-bottom: 14px; }
 }
-
-/* Enable hover only on non-touch devices */
-@media (hover: hover) and (pointer: fine) {
-  a.primary:hover {
-    background: var(--button-primary-hover);
-    border-color: transparent;
-  }
-
-  a.secondary:hover {
-    background: var(--button-secondary-hover);
-    border-color: transparent;
-  }
-}
-
-@media (max-width: 600px) {
-  .main {
-    padding: 48px 24px;
-  }
-
-  .intro {
-    gap: 16px;
-  }
-
-  .intro h1 {
-    font-size: 32px;
-    line-height: 40px;
-    letter-spacing: -1.92px;
-  }
-}
-
-@media (prefers-color-scheme: dark) {
-  .logo {
-    filter: invert();
-  }
-
-  .page {
-    --background: #000;
-    --foreground: #000;
-
-    --text-primary: #ededed;
-    --text-secondary: #999;
-
-    --button-primary-hover: #ccc;
-    --button-secondary-hover: #1a1a1a;
-    --button-secondary-border: #1a1a1a;
-  }
-}
-
-.code {
-  font-family: var(--font-geist-mono);
-  font-size: 0.9em;
-  background: color-mix(in srgb, currentColor 8%, transparent);
-  padding: 0.1em 0.4em;
-  border-radius: 6px;
+@media (max-height: 560px) {
+  .heroSub { display: none; }
+  .heroActions { margin-bottom: 10px; }
 }

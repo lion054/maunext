@@ -1,0 +1,24 @@
+.hero {
+  position: relative; min-height: 50vh; display: flex; align-items: center; text-align: center; justify-content: center;
+  color: #fff; padding: 110px 0 60px;
+}
+.heroOverlay { position: absolute; inset: 0; background: linear-gradient(rgba(10,20,18,.3), rgba(8,16,15,.8)); }
+.heroInner { position: relative; z-index: 1; max-width: 640px; margin: 0 auto; }
+.heroInner h1 { color: #fff; margin: 14px 0 16px; }
+.heroInner p { color: rgba(255,255,255,.85); font-size: 16px; margin-bottom: 24px; }
+
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; padding: 76px 0; }
+.split:nth-child(even) .splitText { order: 2; }
+.splitImg { aspect-ratio: 4/3.2; border-radius: var(--radius-lg); background-size: cover; background-position: center; }
+.splitText h2 { font-size: 26px; margin: 8px 0 14px; }
+.splitText p { font-size: 15px; color: var(--tanova-muted); line-height: 1.7; margin-bottom: 22px; }
+
+.why { background: var(--tanova-ink); border-radius: var(--radius-xl); padding: 60px; text-align: center; color: #fff; margin: 20px 0 90px; }
+.why h2 { color: #fff; margin: 10px 0 16px; }
+.why p { color: rgba(255,255,255,.72); max-width: 60ch; margin: 0 auto 26px; }
+
+@media (max-width: 860px) {
+  .split, .split:nth-child(even) { grid-template-columns: 1fr; }
+  .split:nth-child(even) .splitText { order: 0; }
+  .why { padding: 36px; }
+}

@@ -1,0 +1,32 @@
+.wrap {
+  position: relative; width: 100%; max-width: 560px; margin: 0 auto;
+  aspect-ratio: 420 / 440;
+}
+.svg { width: 100%; height: 100%; overflow: visible; }
+
+.ocean { fill: #eaf3f2; }
+.land { fill: #cfe4cd; stroke: #b7d4b3; stroke-width: 1.5; }
+.lake { fill: #bcdcf0; stroke: #9fc7e3; stroke-width: 1; }
+.lakeLabel { font-size: 7px; fill: var(--tanova-primary); font-weight: 700; pointer-events: none; }
+.island { fill: #cfe4cd; stroke: #b7d4b3; stroke-width: 1; }
+
+.pinLink { cursor: pointer; }
+.pinHalo { fill: var(--tanova-accent); opacity: .18; transition: r var(--dur-fast) var(--ease-out); }
+.pin { fill: var(--tanova-primary); stroke: #fff; stroke-width: 2.5; transition: r var(--dur-fast) var(--ease-out), fill var(--dur-fast) var(--ease-out); }
+.pinLink:hover .pin, .pinLink:focus .pin { fill: var(--tanova-accent); }
+.pinLink:focus { outline: none; }
+
+.tooltip {
+  position: absolute; transform: translate(-50%, -140%);
+  background: var(--tanova-primary); color: #fff; border-radius: var(--radius-sm); padding: 8px 12px;
+  font-size: 12px; white-space: nowrap; display: flex; flex-direction: column; gap: 2px;
+  opacity: 0; pointer-events: none; transition: opacity var(--dur-fast) var(--ease-out);
+  box-shadow: var(--shadow-md); z-index: 2;
+}
+.tooltip b { font-family: var(--serif); font-size: 13px; }
+.tooltip a { color: var(--tanova-gold); font-weight: 700; font-size: 11px; pointer-events: auto; }
+.tooltipActive { opacity: 1; }
+
+@media (max-width: 640px) {
+  .wrap { display: none; }
+}

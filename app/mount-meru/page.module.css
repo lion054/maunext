@@ -1,0 +1,69 @@
+.hero {
+  position: relative; min-height: 56vh; display: flex; align-items: flex-end;
+  color: #fff; border-radius: 0 0 28px 28px; overflow: hidden;
+}
+.heroOverlay { position: absolute; inset: 0; background: linear-gradient(rgba(10,20,18,.2), rgba(8,16,15,.78)); }
+.heroInner { position: relative; z-index: 1; max-width: var(--container); margin: 0 auto; padding: 90px 24px 44px; }
+.heroInner p { max-width: 56ch; font-size: 16px; color: rgba(255,255,255,.85); margin: 14px 0 26px; }
+
+.section { padding: 64px 0; }
+.section p { font-size: 15px; line-height: 1.7; color: var(--tanova-text); margin-top: 14px; max-width: 72ch; }
+
+.highlights { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 28px; }
+.highlight { background: var(--muted-bg); border-radius: var(--radius-md); padding: 22px; }
+.highlight b { display: block; color: var(--tanova-primary); font-size: 14.5px; margin-bottom: 8px; }
+.highlight span { font-size: 13px; color: var(--tanova-muted); line-height: 1.5; }
+
+.zones { display: flex; flex-direction: column; margin-top: 28px; }
+.zone { display: grid; grid-template-columns: 220px 1fr; gap: 20px; padding: 16px 0; border-bottom: 1px solid var(--tanova-line); }
+.zone b { color: var(--tanova-primary); font-size: 14px; }
+.zone span { font-size: 13px; color: var(--tanova-muted); line-height: 1.5; }
+
+.itinerary { margin-top: 28px; display: flex; flex-direction: column; gap: 14px; }
+.day { display: grid; grid-template-columns: 90px 1fr; gap: 20px; background: #fff; border-radius: var(--radius-md); padding: 20px; box-shadow: var(--shadow-sm); }
+.dayNum { font-family: var(--serif); color: var(--tanova-accent); font-size: 15px; font-weight: 700; }
+.day h3 { font-size: 15px; margin-bottom: 6px; }
+.day p { font-size: 13px; color: var(--tanova-muted); margin: 0; }
+
+.cta { background: var(--tanova-primary); color: #fff; border-radius: var(--radius-lg); padding: 54px; text-align: center; margin: 20px 0 90px; }
+.cta h2 { color: #fff; margin-bottom: 14px; }
+.cta p { color: rgba(255,255,255,.82); max-width: 50ch; margin: 0 auto 22px; }
+
+.wildlifeTable { margin-top: 28px; border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--shadow-sm); }
+.wildlifeHead, .wildlifeRow { display: grid; grid-template-columns: 1fr 1.6fr 1.4fr; gap: 16px; padding: 14px 20px; }
+.wildlifeHead { background: var(--tanova-primary); color: #fff; font-size: 11px; text-transform: uppercase; letter-spacing: .05em; font-weight: 700; }
+.wildlifeRow { background: #fff; border-bottom: 1px solid var(--tanova-line); font-size: 13px; color: var(--tanova-muted); }
+.wildlifeRow:last-child { border-bottom: none; }
+.wildlifeZone { color: var(--tanova-primary); font-weight: 700; }
+
+.bestTime { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 28px; }
+.bestTimeCard { background: var(--muted-bg); border-radius: var(--radius-md); padding: 22px; }
+.bestTimeCard b { display: block; font-family: var(--serif); color: var(--tanova-primary); font-size: 15px; margin-bottom: 8px; }
+.bestTimeCard p { font-size: 13px; color: var(--tanova-muted); line-height: 1.55; margin: 0; }
+
+.checkGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; background: var(--muted-bg); border-radius: var(--radius-lg); padding: 26px; margin-top: 24px; }
+.checkCol h4 { font-size: 12px; text-transform: uppercase; letter-spacing: .04em; margin-bottom: 12px; color: var(--tanova-muted); }
+.checkCol ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.checkCol li { font-size: 13.5px; display: flex; gap: 8px; align-items: flex-start; color: var(--tanova-text); }
+.checkYes { color: var(--ok-fg); }
+.checkNo { color: var(--off-fg); }
+
+.faqList { display: flex; flex-direction: column; gap: 14px; margin-top: 28px; }
+.faq { background: #fff; border-radius: var(--radius-md); padding: 20px 22px; box-shadow: var(--shadow-sm); }
+.faq h4 { font-size: 14.5px; color: var(--tanova-primary); margin-bottom: 8px; }
+.faq p { font-size: 13.5px; color: var(--tanova-muted); line-height: 1.6; margin: 0; }
+
+@media (max-width: 900px) {
+  .highlights { grid-template-columns: 1fr; }
+  .zone, .day { grid-template-columns: 1fr; gap: 6px; }
+  .wildlifeHead, .wildlifeRow { grid-template-columns: 1fr; gap: 4px; }
+  .wildlifeHead span:not(:first-child) { display: none; }
+  /* The header's column labels are hidden once the table stacks to one column, so each
+     stacked value needs its own inline label — otherwise a mobile visitor sees the zone
+     name followed by two unlabelled lines of text with no way to tell which is which. */
+  .wildlifeRow span[data-label]::before {
+    content: attr(data-label) ": "; font-weight: 700; color: var(--tanova-primary);
+    text-transform: uppercase; font-size: 10px; letter-spacing: .04em;
+  }
+  .bestTime, .checkGrid { grid-template-columns: 1fr; }
+}

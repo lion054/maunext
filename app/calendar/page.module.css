@@ -1,0 +1,71 @@
+.hero {
+  position: relative; min-height: 46vh; display: flex; align-items: center; text-align: center;
+  color: #fff; padding: 110px 0 60px; justify-content: center;
+}
+.heroOverlay { position: absolute; inset: 0; background: linear-gradient(rgba(10,20,18,.35), rgba(8,16,15,.8)); }
+.heroInner { position: relative; z-index: 1; max-width: 640px; margin: 0 auto; }
+.heroInner p { color: rgba(255,255,255,.85); font-size: 15.5px; margin-top: 14px; line-height: 1.6; }
+
+.section { padding: 64px 0; }
+.lede { font-size: 15px; line-height: 1.7; color: var(--tanova-text); max-width: 72ch; margin-top: 14px; }
+
+/* ── Season legend ─────────────────────────────────────────────── */
+.legend { display: flex; gap: 20px; flex-wrap: wrap; margin: 18px 0 28px; font-size: 12.5px; color: var(--tanova-muted); }
+.legend span { display: inline-flex; align-items: center; gap: 7px; }
+.dotDry, .dotWet, .dotShoulder { width: 9px; height: 9px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
+.dotDry { background: var(--tanova-accent); }
+.dotWet { background: var(--tanova-primary); }
+.dotShoulder { background: #b9a98f; }
+
+/* ── Month grid ────────────────────────────────────────────────── */
+.grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+.month {
+  background: var(--tanova-card); border-radius: var(--radius-md); padding: 18px;
+  border-top: 3px solid transparent; box-shadow: var(--shadow-sm);
+  display: flex; flex-direction: column; gap: 6px;
+}
+.month--dry { border-top-color: var(--tanova-accent); }
+.month--wet { border-top-color: var(--tanova-primary); }
+.month--shoulder { border-top-color: #b9a98f; }
+.monthTop { display: flex; align-items: center; justify-content: space-between; }
+.monthName { font-family: var(--serif); font-size: 20px; color: var(--tanova-primary); }
+.monthTop i { width: 8px; height: 8px; border-radius: 50%; }
+.monthTag { font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--tanova-accent); }
+.monthNote { font-size: 12.5px; color: var(--tanova-text); line-height: 1.55; flex: 1; }
+.monthSeason { font-size: 10.5px; color: var(--tanova-muted); padding-top: 6px; border-top: 1px solid var(--tanova-line); }
+
+/* ── Departures ────────────────────────────────────────────────── */
+.noDep { font-size: 14px; color: var(--tanova-muted); margin-top: 20px; }
+.noDep a { color: var(--tanova-primary); font-weight: 700; }
+.depGrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 28px; }
+.depCard {
+  display: flex; flex-direction: column; background: #fff; border-radius: var(--radius-lg); overflow: hidden;
+  box-shadow: var(--shadow-sm); transition: transform .25s ease, box-shadow .25s ease;
+}
+.depCard:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+.depImg { aspect-ratio: 4/3; background-size: cover; background-position: center; }
+.depBody { padding: 18px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+.depDate { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--tanova-accent); }
+.depTitle { font-family: var(--serif); font-size: 17px; color: var(--tanova-primary); line-height: 1.3; margin: 0; }
+.depSeats { display: flex; flex-direction: column; gap: 5px; margin-top: 4px; }
+.depBar { height: 5px; border-radius: 3px; background: var(--muted-bg); overflow: hidden; }
+.depBarFill { height: 100%; background: var(--tanova-accent); border-radius: 3px; }
+.depSeats span { font-size: 11.5px; color: var(--tanova-muted); }
+.depFoot { display: flex; align-items: center; justify-content: space-between; margin-top: auto; padding-top: 10px; border-top: 1px solid var(--tanova-line); }
+.depPrice { font-size: 16px; font-weight: 800; color: var(--tanova-primary); }
+.depPrice small { font-size: 11px; font-weight: 600; color: var(--tanova-muted); }
+.depCta { font-size: 12.5px; font-weight: 700; color: var(--tanova-accent); white-space: nowrap; }
+
+/* ── Closing CTA ───────────────────────────────────────────────── */
+.cta { text-align: center; padding: 50px 0 90px; }
+.cta p { color: var(--tanova-muted); max-width: 50ch; margin: 12px auto 26px; }
+
+@media (max-width: 900px) {
+  .grid { grid-template-columns: repeat(3, 1fr); }
+  .depGrid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 620px) {
+  .grid { grid-template-columns: repeat(2, 1fr); }
+  .depGrid { grid-template-columns: 1fr; }
+  .legend { gap: 14px; }
+}

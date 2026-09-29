@@ -1,0 +1,60 @@
+.hero {
+  position: relative; min-height: 62vh; display: flex; align-items: center; text-align: center;
+  color: #fff; padding: 120px 0 70px; justify-content: center;
+}
+.heroOverlay { position: absolute; inset: 0; background: linear-gradient(rgba(10,20,18,.35), rgba(8,16,15,.8)); }
+.heroInner { position: relative; z-index: 1; max-width: 640px; margin: 0 auto; }
+.heroTitle { color: #fff; font-size: clamp(34px, 5.5vw, 56px); margin: 14px 0 18px; }
+.heroInner p { color: rgba(255,255,255,.85); font-size: 16px; margin-bottom: 26px; }
+
+.intro { max-width: 720px; margin: 0 auto; text-align: center; padding: 76px 0 20px; }
+.intro p { color: var(--tanova-muted); font-size: 15.5px; line-height: 1.7; margin-top: 16px; }
+
+.sectionHeadLike { max-width: 620px; margin: 0 auto; text-align: center; }
+.promiseGrid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; padding-bottom: 20px; }
+.promiseCard { background: var(--muted-bg); border-radius: var(--radius-lg); padding: 26px; }
+.promiseIcon {
+  display: flex; align-items: center; justify-content: center;
+  width: 42px; height: 42px; border-radius: 50%; margin-bottom: 16px;
+  background: var(--ok-bg); color: var(--ok-fg);
+}
+.promiseCard h3 { font-size: 16px; margin-bottom: 8px; }
+.promiseCard p { font-size: 13px; color: var(--tanova-muted); line-height: 1.55; }
+
+.ramadan { background: var(--tanova-ink); color: #fff; border-radius: var(--radius-xl); padding: 56px; display: grid; grid-template-columns: 1.1fr 1fr; gap: 40px; align-items: center; margin: 20px 0; }
+.ramadan h2 { color: #fff; }
+.ramadan p { color: rgba(255,255,255,.72); margin: 14px 0 22px; }
+.ramadanList { list-style: none; margin: 0 0 26px; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.ramadanList li { font-size: 13.5px; color: rgba(255,255,255,.85); padding-left: 20px; position: relative; }
+.ramadanList li::before { content: "✓"; position: absolute; left: 0; color: var(--tanova-gold); font-weight: 700; }
+.ramadanImg { aspect-ratio: 4/3; border-radius: var(--radius-lg); background-size: cover; background-position: center; }
+
+.spice { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; padding: 76px 0; }
+.spiceImg { aspect-ratio: 4/3; border-radius: var(--radius-lg); background-size: cover; background-position: center; }
+.spice p { color: var(--tanova-muted); font-size: 15px; line-height: 1.6; margin: 14px 0 22px; }
+
+.grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; padding-bottom: 20px; }
+.card { border-radius: var(--radius-lg); overflow: hidden; background: #fff; box-shadow: var(--shadow-sm); }
+.cardImg { aspect-ratio: 4/3; background-size: cover; background-position: center; }
+.cardBody { padding: 18px 20px; }
+.cardTitle { font-family: var(--serif); color: var(--tanova-primary); font-size: 17px; margin: 8px 0; }
+.badgeRow { margin-bottom: 4px; }
+
+.moreHalal { background: var(--muted-bg); border-radius: var(--radius-lg); padding: 28px 30px; margin: 32px 0 20px; }
+.moreHalalLabel { display: block; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--tanova-accent); margin-bottom: 14px; }
+.moreHalalList { display: flex; flex-wrap: wrap; gap: 8px; }
+.moreHalalPill { font-size: 12.5px; color: var(--tanova-primary); background: #fff; border: 1px solid var(--tanova-line); padding: 6px 13px; border-radius: 999px; }
+.moreHalalNote { font-size: 12.5px; color: var(--tanova-muted); margin-top: 16px; }
+
+.cta { background: var(--tanova-primary); color: #fff; border-radius: var(--radius-lg); padding: 56px; text-align: center; margin: 76px 0 90px; }
+.cta h2 { color: #fff; margin-bottom: 14px; }
+.cta p { color: rgba(255,255,255,.8); max-width: 50ch; margin: 0 auto 10px; }
+.cta small { display: block; color: rgba(255,255,255,.6); font-size: 12px; margin-bottom: 22px; }
+
+@media (max-width: 900px) {
+  .promiseGrid, .grid { grid-template-columns: 1fr 1fr; }
+  .ramadan, .spice { grid-template-columns: 1fr; padding: 32px; }
+}
+@media (max-width: 620px) {
+  .promiseGrid, .grid { grid-template-columns: 1fr; }
+}

@@ -1,0 +1,65 @@
+.back { display: inline-flex; align-items: center; gap: 6px; font-size: 13.5px; font-weight: 600; color: var(--tanova-primary); margin: 24px 0; }
+
+.hero { position: relative; aspect-ratio: 21/9; min-height: 260px; border-radius: var(--radius-lg); overflow: hidden; background: var(--tanova-primary); }
+.heroImg { object-fit: cover; }
+.heroAfter { position: absolute; inset: 0; background: linear-gradient(to top, rgba(10,30,29,.78), rgba(10,30,29,.05) 55%, transparent); }
+.availBadge { position: absolute; top: 16px; left: 16px; z-index: 2; }
+.tierBadge { position: absolute; top: 16px; right: 16px; z-index: 2; }
+.heroCap { position: absolute; left: 0; right: 0; bottom: 0; z-index: 2; padding: 26px 30px; color: #fff; }
+.heroTitle { color: #fff; font-size: clamp(26px, 4vw, 40px); margin: 0; }
+.heroLoc { display: flex; align-items: center; gap: 6px; font-size: 14px; margin-top: 8px; opacity: .9; }
+
+.body { display: grid; grid-template-columns: 1.7fr 1fr; gap: 40px; padding: 40px 0 90px; align-items: start; }
+.main h2 { font-size: 22px; margin: 36px 0 16px; }
+.lede { font-size: 16px; color: var(--tanova-text); font-style: italic; }
+.desc { font-size: 14.5px; line-height: 1.7; color: #4b5045; }
+
+.rooms { width: 100%; border-collapse: collapse; }
+.rooms td { padding: 12px 0; border-bottom: 1px solid var(--tanova-line); font-size: 14px; }
+.rooms td:last-child { text-align: right; font-weight: 800; color: var(--tanova-primary); }
+.guests { color: var(--tanova-muted); font-size: 12.5px; margin-left: 6px; }
+
+.amenities { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 10px 18px; }
+.amenities li { font-size: 13.5px; color: var(--tanova-text); padding-left: 20px; position: relative; }
+.amenities li::before { content: "✓"; position: absolute; left: 0; color: var(--tanova-accent); font-weight: 800; }
+
+.gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.galleryItem { position: relative; aspect-ratio: 4/3; overflow: hidden; border-radius: var(--radius-sm); background: var(--muted-bg); }
+.galleryItem img { object-fit: cover; transition: transform .4s ease; }
+.galleryItem:hover img { transform: scale(1.05); }
+
+.aside { position: sticky; top: 96px; }
+.book { background: #fff; border-radius: var(--radius-lg); padding: 22px; box-shadow: var(--shadow-float); display: flex; flex-direction: column; gap: 14px; }
+.bookHead { display: flex; align-items: center; justify-content: space-between; }
+.bookPrice { font-size: 22px; font-weight: 800; color: var(--tanova-primary); }
+.bookPrice em { font-style: normal; font-size: 11px; color: var(--tanova-muted); text-transform: uppercase; margin-right: 4px; }
+.field { display: flex; flex-direction: column; gap: 6px; font-size: 12.5px; font-weight: 700; color: var(--tanova-text); }
+.field input, .field select { border: 1px solid var(--tanova-line); border-radius: var(--radius-sm); padding: 10px 12px; font-size: 14px; font-family: inherit; }
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.note { font-size: 12px; color: var(--tanova-muted); line-height: 1.5; }
+.error { font-size: 12px; color: #b3441f; margin: -6px 0 0; }
+
+.totalRow {
+  display: flex; align-items: center; justify-content: space-between;
+  background: var(--muted-bg); border-radius: var(--radius-sm); padding: 10px 14px;
+  font-size: 13.5px; color: var(--tanova-text);
+}
+.totalRow b { color: var(--tanova-primary); font-size: 16px; }
+
+.sentIcon {
+  width: 44px; height: 44px; border-radius: 50%; background: var(--tanova-primary); color: #fff;
+  display: flex; align-items: center; justify-content: center; font-size: 20px; margin: 0 auto;
+}
+.sentTitle { text-align: center; font-size: 17px; }
+
+@media (max-width: 900px) {
+  .body { grid-template-columns: 1fr; }
+  .gallery { grid-template-columns: repeat(2, 1fr); }
+  .amenities { grid-template-columns: 1fr; }
+  .aside { position: static; }
+}
+@media (max-width: 480px) {
+  /* Check-in/check-out never stacked at any width before — on a small phone each field
+     was ~135px wide, tight for a formatted date and for the DatePicker popover beside it. */
+  .row2 { grid-template-columns: 1fr; }
+}

@@ -1,0 +1,23 @@
+.footer { background: #fff; color: var(--tanova-muted); padding: 72px 0 28px; margin-top: 96px; border-top: 2px solid var(--tanova-ink); }
+.grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 32px; }
+.col h4 { color: var(--tanova-ink); font-size: 11.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 16px; }
+.col ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 9px; }
+.col a { font-size: 13.5px; color: var(--tanova-muted); }
+.col a:hover { color: var(--tanova-primary); }
+.brand { height: 42px; width: auto; margin-bottom: 12px; }
+.tag { font-size: 13.5px; line-height: 1.6; max-width: 30ch; color: var(--tanova-muted); }
+.contact { display: flex; flex-direction: column; gap: 6px; margin-top: 16px; font-size: 13px; }
+.contact a { color: var(--tanova-text); }
+.contact a:hover { color: var(--tanova-primary); }
+.contact span { color: var(--tanova-muted); }
+.social { display: flex; gap: 10px; margin-top: 18px; }
+.socialLink {
+  display: flex; align-items: center; justify-content: center; width: 32px; height: 32px;
+  border-radius: 50%; background: var(--muted-bg); color: var(--tanova-primary);
+}
+.socialLink:hover { background: var(--tanova-primary); color: #fff; }
+.bottom {
+  margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--tanova-line);
+  display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; font-size: 12.5px; color: var(--tanova-muted);
+}
+@media (max-width: 780px) { .grid { grid-template-columns: 1fr 1fr; } }
