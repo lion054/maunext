@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Nunito_Sans, Fraunces } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
@@ -13,6 +13,9 @@ const fraunces = Fraunces({
   axes: ["opsz", "SOFT", "WONK"],
   variable: "--font-serif",
 });
+
+// viewport-fit=cover lets the sticky booking bar respect the iPhone home-indicator inset.
+export const viewport: Viewport = { width: "device-width", initialScale: 1, viewportFit: "cover", themeColor: "#215352" };
 
 export const metadata: Metadata = {
   title: "MaulyTours — Luxury Safaris, Tanzania & East Africa",

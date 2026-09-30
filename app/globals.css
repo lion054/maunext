@@ -175,3 +175,67 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 }
 .collection-badge--sublime { background: var(--tanova-ink); color: var(--tanova-gold); border: 1px solid rgba(240,217,138,.4); }
 .collection-badge--halal { background: var(--ok-bg); color: var(--ok-fg); }
+.collection-badge--cultural { background: #f6efd3; color: #6f6410; }
+.collection-badge--beach { background: #e8f1f0; color: #215352; }
+
+/* ── Form controls — one shared baseline for every text input, select and textarea
+   site-wide (contact, checkout, cart, the trip planner, booking sidebars). Every
+   per-page CSS Module still wins on any conflicting property — this only targets
+   bare elements (:where() keeps the :not() exclusions at zero specificity) so a
+   page's own `.field input` rule always overrides it, this only lifts the ones that
+   had nothing but the browser default. The point: one consistent look, defined once,
+   instead of five slightly-different ad hoc versions of the same input. */
+input:where(:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]):not([type="submit"])),
+select,
+textarea {
+  font: inherit;
+  font-size: 14px;
+  color: var(--tanova-text);
+  background: #fff;
+  border: 1.5px solid var(--tanova-line);
+  border-radius: var(--radius-sm);
+  padding: 11px 14px;
+  width: 100%;
+  transition: border-color var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast) var(--ease-out);
+}
+input::placeholder, textarea::placeholder { color: var(--tanova-muted); opacity: .85; }
+input:where(:hover):not(:disabled), select:hover:not(:disabled), textarea:hover:not(:disabled) { border-color: rgba(33,83,82,.3); }
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--tanova-primary);
+  box-shadow: 0 0 0 4px rgba(33,83,82,.12);
+}
+input:disabled, select:disabled, textarea:disabled { background: var(--muted-bg); color: var(--tanova-muted); cursor: not-allowed; opacity: .8; }
+textarea { resize: vertical; min-height: 88px; line-height: 1.55; }
+select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%2361655b' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 36px;
+  cursor: pointer;
+}
+label { font-weight: 600; }
+
+/* A labeled form field: label text above the control, used across every form on the
+   site. Pages that already define their own `.field` keep it — this is the shared,
+   importable version for anything built or touched after this pass. */
+.form-field { display: flex; flex-direction: column; gap: 7px; font-size: 12.5px; font-weight: 700; color: var(--tanova-text); }
+.form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media (max-width: 560px) { .form-row-2 { grid-template-columns: 1fr; } }
+.form-error { font-size: 12.5px; color: var(--off-fg); background: var(--off-bg); border-radius: var(--radius-sm); padding: 9px 12px; margin: 0; }
+.form-card { background: #fff; border-radius: var(--radius-lg); padding: 26px; box-shadow: var(--shadow-sm); display: flex; flex-direction: column; gap: 16px; }
+@media (max-width: 560px) { .form-card { padding: 20px; } }
+
+
+/* Mobile: 16px form text stops iOS Safari zooming the page on focus; no double-tap delay; no stray tap flash. */
+@media (max-width: 900px) {
+  input:not([type="checkbox"]):not([type="radio"]), select, textarea { font-size: 16px; }
+}
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+a, button, input, select, textarea, label { touch-action: manipulation; -webkit-tap-highlight-color: rgba(33, 83, 82, .12); }
+
+/* Pages with a sticky bottom call-to-action lift the chat bubble clear of it. */
+@media (max-width: 900px) {
+  body:has(.sticky-cta) [data-samira-fab] { bottom: calc(84px + env(safe-area-inset-bottom)); }
+}

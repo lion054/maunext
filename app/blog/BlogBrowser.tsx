@@ -6,6 +6,7 @@ import s from "./page.module.css";
 
 export type Post = { date: string; category: "Safari" | "Retreat" | "Trekking" | "Heritage"; title: string; img: string; fallbackLabel?: string; href?: string };
 
+const PAGE_SIZE = 9;
 const CATEGORIES = ["All", "Safari", "Retreat", "Trekking", "Heritage"] as const;
 
 function Kicker({ category }: { category: Post["category"] }) {
@@ -14,8 +15,15 @@ function Kicker({ category }: { category: Post["category"] }) {
 
 export default function BlogBrowser({ posts }: { posts: Post[] }) {
   const [category, setCategory] = useState<(typeof CATEGORIES)[number]>("All");
+  const [visible, setVisible] = useState(PAGE_SIZE);
   const filtered = useMemo(() => (category === "All" ? posts : posts.filter((p) => p.category === category)), [posts, category]);
-  const [lead, ...river] = filtered;
+  const [lead, ...river] = filtered.slice(0, visible);
+  const remaining = filtered.length - visible;
+
+  const pick = (c: (typeof CATEGORIES)[number]) => {
+    setCategory(c);
+    setVisible(PAGE_SIZE);
+  };
 
   return (
     <>
@@ -23,7 +31,7 @@ export default function BlogBrowser({ posts }: { posts: Post[] }) {
         {CATEGORIES.map((c, i) => (
           <span key={c}>
             {i > 0 && <span className={s.navDivider} aria-hidden="true">|</span>}
-            <button type="button" className={`${s.navItem} ${category === c ? s.navItemActive : ""}`} onClick={() => setCategory(c)}>{c}</button>
+            <button type="button" className={`${s.navItem} ${category === c ? s.navItemActive : ""}`} onClick={() => pick(c)} aria-pressed={category === c}>{c}</button>
           </span>
         ))}
       </nav>
@@ -75,6 +83,17 @@ export default function BlogBrowser({ posts }: { posts: Post[] }) {
             );
           })}
         </div>
+
+        {remaining > 0 && (
+          <div style={{ textAlign: "center", margin: "36px 0 8px" }}>
+            <button type="button" className="btn btn--outline" style={{ color: "var(--tanova-primary)", borderColor: "var(--tanova-primary)" }} onClick={() => setVisible((v) => v + PAGE_SIZE)}>
+              Show {Math.min(PAGE_SIZE, remaining)} more
+            </button>
+            <p aria-live="polite" style={{ fontSize: 12, color: "var(--tanova-muted)", marginTop: 10 }}>
+              Showing {visible} of {filtered.length} stories
+            </p>
+          </div>
+        )}
       </div>
     </>
   );

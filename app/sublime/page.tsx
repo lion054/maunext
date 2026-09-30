@@ -3,16 +3,20 @@ import ParallaxHero from "@/components/ParallaxHero";
 import Reveal from "@/components/Reveal";
 import ReviewList from "@/components/ReviewList";
 import { REVIEWS } from "@/lib/reviews";
+import { getTours } from "@/lib/tours";
 import Price from "@/components/Price";
 import s from "./page.module.css";
 
-const JOURNEYS = [
-  { eye: "Nine Days", price: 6850, title: "Golf & the Great Migration", desc: "Championship golf and a private villa beneath Kilimanjaro, then flown deep into the Serengeti for river crossings from exclusive migration camps.", url: "/safaris/luxury-golf-serengeti-migration-safari", linkLabel: "View full itinerary", img: "/img/kilimanjaro-summit-night.jpg" },
-  { eye: "Ten Days", price: null, title: "The Grand Tanzanian Journey", desc: "Four iconic parks in supreme comfort, completed by Zanzibar's Stone Town and a private beach sanctuary — every detail anticipated.", url: "/safaris/grand-tanzanian-journey", linkLabel: "View full itinerary", img: "/img/zanzibar-island.jpg" },
-  { eye: "Seven Days", price: 4650, title: "Private Migration Wilderness", desc: "Exclusive-use luxury camps that move with the herds across Tarangire, the Northern Serengeti and Ngorongoro — your own vehicle, your own pace.", url: "/safaris/migration-wilderness-wanderlust", linkLabel: "View full itinerary", img: "/img/tarangire-elephants.jpg" },
-];
+function dayLabel(n: number) {
+  const NAMES = ["", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve"];
+  return `${NAMES[n] ?? n} Day${n === 1 ? "" : "s"}`;
+}
 
-const SUBLIME_REVIEWS = REVIEWS.filter((r) => r.tourSlug === "luxury-golf-serengeti-migration-safari" || r.tourSlug === "migration-wilderness-wanderlust");
+// No review is tagged to a specific Sublime-tier tour in the real data, so this picks the
+// two real reviews that specifically describe the bespoke, high-touch planning experience
+// (rather than a generic 3-star-park group safari) — the closest real match to what this
+// page is selling.
+const SUBLIME_REVIEWS = REVIEWS.filter((r) => r.name === "Dhaval D" || r.name === "Alice W");
 
 const STANDARD = [
   ["Private throughout", "Your own vehicle, private guide and exclusive-use camps — never a shared departure."],
@@ -21,7 +25,20 @@ const STANDARD = [
   ["A dedicated concierge", "One expert designs and quietly oversees your entire journey, before and throughout."],
 ];
 
-export default function SublimePage() {
+export default async function SublimePage() {
+  const tours = await getTours();
+  const JOURNEYS = tours
+    .filter((t) => t.collections?.includes("sublime"))
+    .slice(0, 3)
+    .map((t) => ({
+      eye: dayLabel(t.days),
+      price: t.price ?? null,
+      title: t.title,
+      desc: t.summary.length > 220 ? t.summary.slice(0, 217) + "…" : t.summary,
+      url: `/safaris/${t.slug}`,
+      linkLabel: "View full itinerary",
+      img: t.img,
+    }));
   return (
     <div className={s.page}>
       <ParallaxHero image="/img/paje-golden-hour.jpg" className={s.hero} overlayClassName={s.heroOverlay}>

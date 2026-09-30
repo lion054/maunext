@@ -1,13 +1,14 @@
 import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { STAYS, getStay } from "@/lib/stays";
+import { getStays, getStay } from "@/lib/stays";
 import BookingCard from "./BookingCard";
 import Price from "@/components/Price";
 import s from "./page.module.css";
 
-export function generateStaticParams() {
-  return STAYS.map((stay) => ({ slug: stay.slug }));
+export async function generateStaticParams() {
+  const stays = await getStays();
+  return stays.map((stay) => ({ slug: stay.slug }));
 }
 
 const AVAIL_LABEL: Record<string, string> = {
@@ -20,7 +21,7 @@ const AVAIL_CLASS: Record<string, string> = {
 
 export default async function StayDetail({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const stay = getStay(slug);
+  const stay = await getStay(slug);
   if (!stay) notFound();
 
   return (

@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import type { Tour } from "@/lib/tours";
-import CollectionBadges from "@/components/CollectionBadges";
+import { excerpt } from "@/lib/destinations";
 import { useCurrency } from "@/lib/currency/CurrencyProvider";
 import s from "./page.module.css";
 
@@ -14,6 +14,12 @@ const COLLECTIONS = [
   { id: "all", label: "All Collections" },
   { id: "sublime", label: "Sublime Collection" },
   { id: "halal", label: "Halal Approved" },
+] as const;
+const PRODUCT_TYPES = [
+  { id: "all", label: "All Types" },
+  { id: "day_trip", label: "Day Trips" },
+  { id: "package", label: "Packages" },
+  { id: "multi_day_tour", label: "Multi-Day Tours" },
 ] as const;
 const SORTS = [
   { id: "featured", label: "Featured" },
@@ -26,18 +32,44 @@ const SORTS = [
 
 const PAGE_SIZE = 15;
 
-export default function SafarisBrowser({ tours }: { tours: Tour[] }) {
+const COLLECTION_TAG = { sublime: "Sublime Collection", halal: "Halal Approved", cultural: "Cultural", beach: "Beach" } as const;
+const TYPE_LABEL = { day_trip: "Day trip", package: "Package", multi_day_tour: "Multi-day tour", activity: "Activity" } as const;
+
+/** A floating dropdown card: an accent label over a native <select> (keeps keyboard and
+ *  screen-reader behaviour for free), restyled to sit in the filter row. */
+function Drop({ label, value, onChange, options }: { label: string; value: string; onChange: (v: string) => void; options: { value: string; label: string }[] }) {
+  return (
+    <label className={s.kDrop}>
+      <span className={s.kDropLabel}>{label}</span>
+      <select value={value} onChange={(e) => onChange(e.target.value)}>
+        {options.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
+      </select>
+    </label>
+  );
+}
+
+export default function SafarisBrowser({ tours, destinations }: { tours: Tour[]; destinations: { id: number; slug: string; title: string }[] }) {
   const params = useSearchParams();
   const { format } = useCurrency();
   const styles = useMemo(() => ["All Styles", ...Array.from(new Set(tours.map((t) => t.style)))], [tours]);
-  const REGIONS = useMemo(() => ["All Regions", ...Array.from(new Set(tours.map((t) => t.region)))], [tours]);
+  // Only destinations that have live tours, with counts — the tour's own address is free text
+  // (dozens of unique values), so it makes a poor filter.
+  const destOptions = useMemo(() => {
+    const count = new Map<number, number>();
+    tours.forEach((t) => t.locationId != null && count.set(t.locationId, (count.get(t.locationId) ?? 0) + 1));
+    return destinations.filter((d) => count.has(d.id)).map((d) => ({ value: d.slug, label: `${d.title} (${count.get(d.id)})` }));
+  }, [tours, destinations]);
+  const destById = useMemo(() => new Map(destinations.map((d) => [d.id, d])), [destinations]);
 
-  const [region, setRegion] = useState(params.get("region") ?? "All Regions");
+  const [region, setRegion] = useState(params.get("destination") ?? "all");
   const [style, setStyle] = useState(params.get("style") ?? "All Styles");
   const [collection, setCollection] = useState<(typeof COLLECTIONS)[number]["id"]>(
     (params.get("collection") as (typeof COLLECTIONS)[number]["id"]) ?? "all"
   );
-  const [maxDays, setMaxDays] = useState(0);
+  const [productType, setProductType] = useState<(typeof PRODUCT_TYPES)[number]["id"]>(
+    (params.get("type") as (typeof PRODUCT_TYPES)[number]["id"]) ?? "all"
+  );
+  const [maxDays, setMaxDays] = useState(Number(params.get("days")) || 0);
   const [sort, setSort] = useState<(typeof SORTS)[number]["id"]>("featured");
   const [visible, setVisible] = useState(PAGE_SIZE);
   const [compareSlugs, setCompareSlugs] = useState<string[]>([]);
@@ -73,21 +105,22 @@ export default function SafarisBrowser({ tours }: { tours: Tour[] }) {
 
   const filtered = useMemo(() => {
     let list = tours.filter((t) =>
-      (region === "All Regions" || t.region === region) &&
+      (region === "all" || (t.locationId != null && destById.get(t.locationId)?.slug === region)) &&
       (style === "All Styles" || t.style === style) &&
       (maxDays === 0 || t.days <= maxDays) &&
-      (collection === "all" || t.collections?.includes(collection))
+      (collection === "all" || t.collections?.includes(collection)) &&
+      (productType === "all" || t.productType === productType)
     );
     if (sort === "price-asc") list = [...list].sort((a, b) => (a.price ?? Infinity) - (b.price ?? Infinity));
     if (sort === "price-desc") list = [...list].sort((a, b) => (b.price ?? -1) - (a.price ?? -1));
     if (sort === "duration") list = [...list].sort((a, b) => a.days - b.days);
     return list;
-  }, [tours, region, style, collection, maxDays, sort]);
+  }, [tours, region, style, collection, productType, maxDays, sort, destById]);
 
   // Reset pagination when the filters change. Adjusted during render (React's documented
   // alternative to an effect for "reset state when a dependency changes") rather than in a
   // useEffect, which would cost an extra render+commit cycle for the same result.
-  const filterKey = `${region}|${style}|${collection}|${maxDays}|${sort}`;
+  const filterKey = `${region}|${style}|${collection}|${productType}|${maxDays}|${sort}`;
   const [prevFilterKey, setPrevFilterKey] = useState(filterKey);
   if (filterKey !== prevFilterKey) {
     setPrevFilterKey(filterKey);
@@ -98,77 +131,68 @@ export default function SafarisBrowser({ tours }: { tours: Tour[] }) {
 
   return (
     <>
-      <div className={s.filterBar}>
-        <label className={s.filterField}>
-          <span>Region</span>
-          <select value={region} onChange={(e) => setRegion(e.target.value)}>
-            {REGIONS.map((r) => <option key={r} value={r}>{r}</option>)}
-          </select>
-        </label>
-        <label className={s.filterField}>
-          <span>Style</span>
-          <select value={style} onChange={(e) => setStyle(e.target.value)}>
-            {styles.map((r) => <option key={r} value={r}>{r}</option>)}
-          </select>
-        </label>
-        <label className={s.filterField}>
-          <span>Collection</span>
-          <select value={collection} onChange={(e) => setCollection(e.target.value as typeof collection)}>
-            {COLLECTIONS.map((c) => <option key={c.id} value={c.id}>{c.label}</option>)}
-          </select>
-        </label>
-        <label className={s.filterField}>
-          <span>Duration</span>
-          <select value={maxDays} onChange={(e) => setMaxDays(Number(e.target.value))}>
-            <option value={0}>Any length</option>
-            <option value={2}>Up to 2 days</option>
-            <option value={5}>Up to 5 days</option>
-            <option value={9}>Up to 9 days</option>
-          </select>
-        </label>
-        <label className={s.filterField}>
-          <span>Sort by</span>
-          <select value={sort} onChange={(e) => setSort(e.target.value as typeof sort)}>
-            {SORTS.map((r) => <option key={r.id} value={r.id}>{r.label}</option>)}
-          </select>
-        </label>
-        {(region !== "All Regions" || style !== "All Styles" || collection !== "all" || maxDays !== 0) && (
-          <button type="button" className={s.filterClear} onClick={() => { setRegion("All Regions"); setStyle("All Styles"); setCollection("all"); setMaxDays(0); }}>
+      <div className={s.kFilters}>
+        <div className={s.kGroup}>
+          <Drop label="Destination" value={region} onChange={setRegion} options={[{ value: "all", label: "All destinations" }, ...destOptions]} />
+          <Drop label="Style" value={style} onChange={setStyle} options={styles.map((r) => ({ value: r, label: r }))} />
+          <Drop label="Type" value={productType} onChange={(v) => setProductType(v as typeof productType)} options={PRODUCT_TYPES.map((c) => ({ value: c.id, label: c.label }))} />
+          <Drop label="Collection" value={collection} onChange={(v) => setCollection(v as typeof collection)} options={COLLECTIONS.map((c) => ({ value: c.id, label: c.label }))} />
+          <Drop label="Length" value={String(maxDays)} onChange={(v) => setMaxDays(Number(v))} options={[
+            { value: "0", label: "Any length" }, { value: "2", label: "Up to 2 days" }, { value: "5", label: "Up to 5 days" }, { value: "9", label: "Up to 9 days" },
+          ]} />
+        </div>
+        <Drop label="Sort by" value={sort} onChange={(v) => setSort(v as typeof sort)} options={SORTS.map((r) => ({ value: r.id, label: r.label }))} />
+      </div>
+
+      <div className={s.resultRow}>
+        <p className={s.resultCount} aria-live="polite">{filtered.length} {filtered.length === 1 ? "journey" : "journeys"} found</p>
+        {(region !== "all" || style !== "All Styles" || collection !== "all" || productType !== "all" || maxDays !== 0) && (
+          <button type="button" className={s.filterClear} onClick={() => { setRegion("all"); setStyle("All Styles"); setCollection("all"); setProductType("all"); setMaxDays(0); }}>
             Clear filters
           </button>
         )}
       </div>
 
-      <p className={s.resultCount}>{filtered.length} {filtered.length === 1 ? "itinerary" : "itineraries"} found</p>
-
       {filtered.length === 0 ? (
         <p className={s.noResults}>No itineraries match those filters yet — try widening your search, or <Link href="/contact">tell us what you have in mind</Link>.</p>
       ) : (
         <>
-          <div className={s.grid} key={`${region}|${style}|${collection}|${maxDays}|${sort}`}>
-            {shown.map((t) => (
-              <Link href={`/safaris/${t.slug}`} className={s.card} key={t.slug}>
-                <div className={s.img} style={{ backgroundImage: `url(${t.img})` }}>
-                  <CollectionBadges collections={t.collections} className={s.cardBadges} />
-                  <button
-                    type="button"
-                    className={`${s.compareToggle} ${compareSlugs.includes(t.slug) ? s.compareToggleActive : ""}`}
-                    onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleCompare(t.slug); }}
-                    aria-pressed={compareSlugs.includes(t.slug)}
-                    aria-label={compareSlugs.includes(t.slug) ? `Remove ${t.title} from comparison` : `Add ${t.title} to comparison`}
-                    disabled={!compareSlugs.includes(t.slug) && compareSlugs.length >= MAX_COMPARE}
-                  >
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M5 12l5 5L20 7" /></svg>
-                    Compare
-                  </button>
-                </div>
-                <div className={s.body}>
-                  <h3 className={s.title}>{t.title}</h3>
-                  <p className={s.desc}>{t.meta} &middot; {t.price ? `from ${format(t.price)}` : "Price on request"}</p>
-                  <span className={s.link}>View tour &rarr;</span>
-                </div>
-              </Link>
-            ))}
+          <div className={s.kGrid} key={`${region}|${style}|${collection}|${productType}|${maxDays}|${sort}`}>
+            {shown.map((t) => {
+              const tag = t.collections?.[0] ? COLLECTION_TAG[t.collections[0]] : undefined;
+              const inCompare = compareSlugs.includes(t.slug);
+              return (
+                <article className={s.kCard} key={t.slug}>
+                  <div className={s.kImg} style={{ backgroundImage: `url(${t.img})` }}>
+                    <button
+                      type="button"
+                      className={`${s.compareToggle} ${inCompare ? s.compareToggleActive : ""}`}
+                      onClick={() => toggleCompare(t.slug)}
+                      aria-pressed={inCompare}
+                      aria-label={inCompare ? `Remove ${t.title} from comparison` : `Add ${t.title} to comparison`}
+                      disabled={!inCompare && compareSlugs.length >= MAX_COMPARE}
+                    >
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M5 12l5 5L20 7" /></svg>
+                      Compare
+                    </button>
+                  </div>
+                  <div className={s.kText}>
+                    {tag && <span className={s.kTag}>{tag}</span>}
+                    <h3 className={s.kTitle}><Link href={`/safaris/${t.slug}`}>{t.title}</Link></h3>
+                    <p className={s.kSummary}>{excerpt(t.summary, 120)}</p>
+                    <ul className={s.kMeta}>
+                      <li><strong>Trip type</strong> {t.productType ? TYPE_LABEL[t.productType] : t.style}</li>
+                      <li><strong>Duration</strong> {t.days} {t.days === 1 ? "day" : "days"}</li>
+                      <li><strong>Location</strong> {(t.locationId != null && destById.get(t.locationId)?.title) || t.region}</li>
+                    </ul>
+                    <div className={s.kFoot}>
+                      <Link href={`/safaris/${t.slug}`} className={s.kExplore}>Explore this trip</Link>
+                      <div className={s.kPrice}>{t.price ? <>From <strong>{format(t.price)}</strong></> : <strong>On request</strong>}</div>
+                    </div>
+                  </div>
+                </article>
+              );
+            })}
           </div>
           {visible < filtered.length && (
             <div className={s.loadMoreRow}>

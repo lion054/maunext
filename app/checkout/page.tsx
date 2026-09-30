@@ -28,7 +28,9 @@ export default function CheckoutPage() {
   const [date, setDate] = useState("");
   const [notes, setNotes] = useState("");
   const [results, setResults] = useState<BookingResult[]>([]);
-  const canSubmitDetails = firstName.trim() !== "" && lastName.trim() !== "" && email.trim() !== "" && date !== "";
+  // Items added from a tour page already carry their own date; only ask for one when something lacks it.
+  const needsDate = items.some((i) => !i.date);
+  const canSubmitDetails = firstName.trim() !== "" && lastName.trim() !== "" && email.trim() !== "" && (!needsDate || date !== "");
 
   if (items.length === 0 && step !== "done") {
     return (
@@ -55,7 +57,7 @@ export default function CheckoutPage() {
             body: JSON.stringify({
               kind: item.kind,
               slug: item.slug,
-              startDate: date,
+              startDate: item.date ?? date,
               adults: item.qty,
               firstName,
               lastName,
@@ -83,7 +85,7 @@ export default function CheckoutPage() {
     return (
       <div className="wrap">
         <div className={s.done}>
-          <div className={s.doneIcon}>{succeeded.length > 0 ? "✓" : "!"}</div>
+          <div className={`${s.doneIcon} ${succeeded.length === 0 ? s.doneIconError : ""}`}>{succeeded.length > 0 ? "✓" : "!"}</div>
           <span className="eyebrow">{succeeded.length > 0 ? "Booking request sent" : "Booking could not be created"}</span>
           <h1>{succeeded.length > 0 ? `Thank you, ${firstName}` : "Something went wrong"}</h1>
           <p>
@@ -111,7 +113,7 @@ export default function CheckoutPage() {
               {failed.map((r) => (
                 <div key={r.itemId} className={s.summaryItem}>
                   <span>{r.title}</span>
-                  <span className={s.note} style={{ color: "var(--tanova-primary)" }}>{r.error}</span>
+                  <span className={s.note} style={{ color: "var(--off-fg)" }}>{r.error}</span>
                 </div>
               ))}
             </div>
@@ -157,9 +159,11 @@ export default function CheckoutPage() {
             <label className={s.field}>Phone (optional)
               <input type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} />
             </label>
-            <label className={s.field}>Preferred travel date
-              <DatePicker value={date} onChange={setDate} placeholder="Select a date" />
-            </label>
+            {needsDate && (
+              <label className={s.field}>Preferred travel date
+                <DatePicker value={date} onChange={setDate} placeholder="Select a date" />
+              </label>
+            )}
             <label className={s.field}>Notes for our team (optional)
               <textarea rows={3} value={notes} onChange={(e) => setNotes(e.target.value)} />
             </label>

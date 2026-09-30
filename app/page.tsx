@@ -5,12 +5,15 @@ import Reveal from "@/components/Reveal";
 import HeroSearch from "@/components/HeroSearch";
 import CollectionBadges from "@/components/CollectionBadges";
 import Stars from "@/components/Stars";
-import { TOURS } from "@/lib/tours";
+import ReviewsCarousel from "@/components/ReviewsCarousel";
+import { getTours } from "@/lib/tours";
+import { getDestinations } from "@/lib/destinations";
+import { getStays } from "@/lib/stays";
+import { buildSearchOptions } from "@/lib/searchOptions";
 import { REVIEWS } from "@/lib/reviews";
 import { seededShuffle, todaySeed } from "@/lib/shuffle";
 import s from "./page.module.css";
 
-const HANDPICKED_TOURS = seededShuffle(TOURS, todaySeed + ":tours").slice(0, 6);
 const FEATURED_REVIEWS = seededShuffle(REVIEWS, todaySeed + ":reviews").slice(0, 3);
 
 const EXPERIENCES = [
@@ -47,7 +50,11 @@ const JOURNAL = [
   { tag: "Trekking", date: "August 17, 2026", title: "7 Mount Kilimanjaro Myths Debunked", img: "" },
 ];
 
-export default function Home() {
+export default async function Home() {
+  const [tours, destinations, stays] = await Promise.all([getTours(), getDestinations(), getStays()]);
+  const searchOptions = buildSearchOptions(tours, destinations, stays.length);
+  const HANDPICKED_TOURS = seededShuffle(tours, todaySeed + ":tours").slice(0, 6);
+  const DAY_TRIPS = tours.filter((t) => t.productType === "day_trip");
   return (
     <>
       <ParallaxHero image="/img/leopard-serengeti-plains.webp" video="/video/hero.mp4" className={s.hero} overlayClassName={s.heroOverlay}>
@@ -65,7 +72,7 @@ export default function Home() {
             <span className={s.divider}>|</span>
             <span>Tanzania &middot; Rwanda &middot; Kenya &mdash; four decades in the field</span>
           </div>
-          <HeroSearch />
+          <HeroSearch options={searchOptions} />
         </div>
         <div className={s.scrollCue} aria-hidden="true"><span>Scroll</span><i /></div>
       </ParallaxHero>
@@ -147,6 +154,31 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {DAY_TRIPS.length > 0 && (
+        <section className={s.toursBand}>
+          <div className="wrap">
+            <Reveal className={s.toursHead}>
+              <div>
+                <span className="eyebrow">Short on time?</span>
+                <h2>Day Trips <em>Worth the Detour</em></h2>
+              </div>
+              <Link href="/safaris?type=day_trip" className="btn btn--primary">See All Day Trips &rarr;</Link>
+            </Reveal>
+            <div className={s.toursGrid}>
+              {DAY_TRIPS.map((t, i) => (
+                <Reveal key={t.title} delay={i * 0.05}>
+                  <Link href={`/safaris/${t.slug}`} className={s.tourTile} style={{ backgroundImage: `url(${t.img})` }}>
+                    <CollectionBadges collections={t.collections} className={s.tourTileBadges} />
+                    <span className={s.tourTileTitle}>{t.title}</span>
+                    <span className={s.tourTileMeta}>{t.meta}</span>
+                  </Link>
+                </Reveal>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       <section className={s.collectionsBand}>
         <div className="wrap">
@@ -238,21 +270,16 @@ export default function Home() {
           <Reveal className={s.reviewsRow}>
             <div className={s.taWidget}>
               <b>EXCELLENT</b>
-              <div className={s.taCircles}>{"●●●●●".split("").map((c, i) => <span key={i}>{c}</span>)}</div>
-              <span>Based on 266 reviews</span>
-              <small>Tripadvisor</small>
-            </div>
-            {FEATURED_REVIEWS.map((r) => (
-              <div className={s.reviewCard} key={r.title}>
-                <div className={s.reviewHead}>
-                  <span className={s.reviewAvatar}>{r.initials}</span>
-                  <div><b>{r.name}</b><span>{r.date}</span></div>
-                </div>
-                <Stars n={r.rating} size={12} className={s.reviewStars} />
-                <h4 className={s.reviewTitle}>{r.title}</h4>
-                <p>{r.body}</p>
+              <div className={s.taCircles}>
+                {Array.from({ length: 5 }).map((_, i) => (
+                  // eslint-disable-next-line @next/next/no-img-element -- real TripAdvisor star asset
+                  <img src="https://cdn.trustindex.io/assets/platform/Tripadvisor/star/f.svg" alt="" key={i} width={22} height={22} />
+                ))}
               </div>
-            ))}
+              <span>Based on 266 reviews</span>
+              <Image src="/img/logo-tripadvisor.webp" alt="Tripadvisor" width={701} height={450} className={s.taLogo} />
+            </div>
+            <ReviewsCarousel reviews={FEATURED_REVIEWS} />
           </Reveal>
         </div>
       </section>

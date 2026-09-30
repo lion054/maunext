@@ -29,15 +29,14 @@
 .galleryItem:hover img { transform: scale(1.05); }
 
 .aside { position: sticky; top: 96px; }
-.book { background: #fff; border-radius: var(--radius-lg); padding: 22px; box-shadow: var(--shadow-float); display: flex; flex-direction: column; gap: 14px; }
-.bookHead { display: flex; align-items: center; justify-content: space-between; }
+.book { background: #fff; border-radius: var(--radius-lg); padding: 24px; box-shadow: var(--shadow-float); display: flex; flex-direction: column; gap: 16px; }
+.bookHead { display: flex; align-items: center; justify-content: space-between; padding-bottom: 16px; border-bottom: 1px solid var(--tanova-line); }
 .bookPrice { font-size: 22px; font-weight: 800; color: var(--tanova-primary); }
 .bookPrice em { font-style: normal; font-size: 11px; color: var(--tanova-muted); text-transform: uppercase; margin-right: 4px; }
-.field { display: flex; flex-direction: column; gap: 6px; font-size: 12.5px; font-weight: 700; color: var(--tanova-text); }
-.field input, .field select { border: 1px solid var(--tanova-line); border-radius: var(--radius-sm); padding: 10px 12px; font-size: 14px; font-family: inherit; }
-.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.note { font-size: 12px; color: var(--tanova-muted); line-height: 1.5; }
-.error { font-size: 12px; color: #b3441f; margin: -6px 0 0; }
+.field { display: flex; flex-direction: column; gap: 7px; font-size: 12.5px; font-weight: 700; color: var(--tanova-text); }
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.note { font-size: 12px; color: var(--tanova-muted); line-height: 1.6; padding-top: 4px; border-top: 1px solid var(--tanova-line); }
+.error { font-size: 12.5px; color: var(--off-fg); background: var(--off-bg); border-radius: var(--radius-sm); padding: 9px 12px; margin: -4px 0 0; }
 
 .totalRow {
   display: flex; align-items: center; justify-content: space-between;

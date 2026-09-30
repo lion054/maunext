@@ -2,23 +2,33 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import ParallaxHero from "@/components/ParallaxHero";
 import Reveal from "@/components/Reveal";
-import { DESTINATIONS, getDestination } from "@/lib/destinations";
-import { TOURS } from "@/lib/tours";
+import { getDestinations, getDestination } from "@/lib/destinations";
+import { getTours } from "@/lib/tours";
 import { seededShuffle, todaySeed } from "@/lib/shuffle";
 import Price from "@/components/Price";
+import SeasonCalendar from "@/components/SeasonCalendar";
+import { getDepartures } from "@/lib/departures";
 import s from "./page.module.css";
 
-export function generateStaticParams() {
-  return DESTINATIONS.map((d) => ({ slug: d.slug }));
+export async function generateStaticParams() {
+  const destinations = await getDestinations();
+  return destinations.map((d) => ({ slug: d.slug }));
 }
 
 export default async function DestinationDetail({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const dest = getDestination(slug);
+  const [dest, tours, departures] = await Promise.all([getDestination(slug), getTours(), getDepartures().catch(() => [])]);
   if (!dest) notFound();
 
+  // Live group departures at this destination, bucketed by calendar month (0 = January).
+  const monthlyDepartures = Array<number>(12).fill(0);
+  for (const d of departures) {
+    if (dest.tourSlugs?.includes(d.tourSlug)) monthlyDepartures[Number(d.date.slice(5, 7)) - 1]++;
+  }
+  const currentMonth = new Date().getMonth();
+
   const related = seededShuffle(
-    (dest.tourSlugs ?? []).map((ts) => TOURS.find((t) => t.slug === ts)).filter(Boolean),
+    (dest.tourSlugs ?? []).map((ts) => tours.find((t) => t.slug === ts)).filter((t) => t !== undefined),
     todaySeed + ":related:" + dest.slug
   );
 
@@ -34,9 +44,33 @@ export default async function DestinationDetail({ params }: { params: Promise<{ 
       </ParallaxHero>
 
       <div className="wrap">
+        {dest.facts.length > 0 && (
+          <dl className={s.facts}>
+            {dest.facts.map((f) => (
+              <div key={f.label}><dt>{f.label}</dt><dd>{f.value}</dd></div>
+            ))}
+          </dl>
+        )}
+
         <Reveal className={s.section} as="div">
-          <span className="eyebrow">Overview</span>
-          <p className={s.intro}>{dest.intro}</p>
+          <div className={s.overview}>
+            <div>
+              <span className="eyebrow">Overview</span>
+              <p className={s.intro}>{dest.intro}</p>
+              {dest.about.length > 0 && (
+                <>
+                  <h2 className={s.aboutTitle}>What makes {dest.title} different</h2>
+                  {dest.about.map((p) => <p className={s.about} key={p}>{p}</p>)}
+                </>
+              )}
+            </div>
+            {dest.goodToKnow.length > 0 && (
+              <aside className={s.know}>
+                <h4>Good to know</h4>
+                <ul>{dest.goodToKnow.map((g) => <li key={g}>{g}</li>)}</ul>
+              </aside>
+            )}
+          </div>
         </Reveal>
 
         {dest.highlights.length > 0 && (
@@ -73,6 +107,14 @@ export default async function DestinationDetail({ params }: { params: Promise<{ 
             <span className={s.videoCaption}>A closer look at {dest.title}</span>
           </div>
         </Reveal>
+
+        {dest.months.length === 12 && (
+          <Reveal className={s.section} as="div">
+            <span className="eyebrow">Visitor calendar</span>
+            <h2>When to Visit {dest.title}</h2>
+            <SeasonCalendar title={dest.title} months={dest.months} departures={monthlyDepartures} currentMonth={currentMonth} />
+          </Reveal>
+        )}
 
         {(dest.whenToGo || dest.gettingThere) && (
           <Reveal className={s.section} as="div">

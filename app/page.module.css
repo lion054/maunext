@@ -178,23 +178,12 @@
 .impactStats span { font-size: 12px; color: var(--tanova-muted); }
 
 /* ── Reviews ───────────────────────────────────────────────────── */
-.reviewsRow { display: grid; grid-template-columns: 1fr repeat(3, 1.3fr); gap: 16px; align-items: stretch; }
+.reviewsRow { display: grid; grid-template-columns: 220px 1fr; gap: 40px; align-items: center; }
 .taWidget { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; text-align: center; padding: 20px; }
 .taWidget b { font-size: 15px; letter-spacing: .04em; }
-.taCircles { display: flex; gap: 3px; color: var(--ok-fg); font-size: 14px; }
+.taCircles { display: flex; gap: 3px; }
 .taWidget span { font-size: 12px; color: var(--tanova-muted); }
-.taWidget small { font-weight: 700; color: #34e0a1; }
-.reviewCard { background: #fff; border-radius: var(--radius-md); padding: 20px; box-shadow: var(--shadow-sm); display: flex; flex-direction: column; gap: 8px; }
-.reviewHead { display: flex; align-items: center; gap: 10px; font-size: 12.5px; }
-.reviewAvatar {
-  width: 34px; height: 34px; border-radius: 50%; background: var(--tanova-primary); color: #fff; flex-shrink: 0;
-  display: flex; align-items: center; justify-content: center; font-size: 11.5px; font-weight: 800;
-}
-.reviewHead b { color: var(--tanova-primary); display: block; }
-.reviewHead span { color: var(--tanova-muted); }
-.reviewStars { color: var(--tanova-gold); display: inline-flex; gap: 1px; }
-.reviewTitle { font-family: var(--serif); font-size: 14.5px; color: var(--tanova-primary); margin: 0; }
-.reviewCard p { font-size: 13px; color: var(--tanova-text); line-height: 1.5; }
+.taLogo { height: 22px; width: auto; margin-top: 4px; }
 
 /* ── Accreditation logo grid ───────────────────────────────────── */
 .logoGrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
@@ -240,10 +229,10 @@
       "cta     cta";
   }
   .motionGrid, .impactGrid { grid-template-columns: 1fr; }
-  .reviewsRow { grid-template-columns: 1fr 1fr; }
+  .reviewsRow { grid-template-columns: 1fr; justify-items: center; }
 }
 @media (max-width: 620px) {
-  .grid3, .expGrid, .toursGrid, .logoGrid, .reviewsRow { grid-template-columns: 1fr; }
+  .grid3, .expGrid, .toursGrid, .logoGrid { grid-template-columns: 1fr; }
   .bento { grid-template-columns: 1fr; grid-template-rows: none; grid-template-areas: none; }
 }
 

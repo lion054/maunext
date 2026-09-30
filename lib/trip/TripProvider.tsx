@@ -12,6 +12,8 @@ export type CartItem = {
   unitPrice: number;
   qty: number;
   meta?: string;
+  /** ISO travel date chosen on the item itself (departure or picked date); checkout falls back to its own date field when absent. */
+  date?: string;
 };
 
 type State = { items: CartItem[] };

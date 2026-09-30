@@ -1,48 +1,35 @@
-import Link from "next/link";
 import { Suspense } from "react";
-import { TOURS } from "@/lib/tours";
+import { getTours } from "@/lib/tours";
+import { getDestinations } from "@/lib/destinations";
 import { seededShuffle, todaySeed } from "@/lib/shuffle";
 import SafarisBrowser from "./SafarisBrowser";
 import s from "./page.module.css";
 
-const CATEGORIES = [
-  { title: "Classic Safari", desc: "Game drives across the northern circuit — Serengeti, Ngorongoro and Tarangire.", img: "/img/great-migration.jpg" },
-  { title: "Luxury Safari", desc: "Exclusive-use camps and private guiding, at the pace you choose.", img: "/img/lion-manyara.webp" },
-  { title: "Family Safari", desc: "Paced for every age, with lodges that welcome children.", img: "/img/flamingos-momella.webp" },
-  { title: "Honeymoon Safari", desc: "Romance-first itineraries, ending on a private beach.", img: "/img/zanzibar-sunset.jpg" },
-  { title: "Halal Safari", desc: "Halal-verified dining and prayer-time-aware scheduling throughout.", img: "/img/tarangire-elephants.jpg" },
-  { title: "Golf & Safari", desc: "Championship golf beneath Kilimanjaro, then straight into the bush.", img: "/img/kilimanjaro-summit-night.jpg" },
-];
+export const metadata = {
+  title: "Tanzania Safaris & Journeys | Mauly Tours",
+  description: "Browse every Mauly Tours safari, trek and journey, and filter by region, style, length and price.",
+};
 
-export default function SafarisPage() {
+export default async function SafarisPage() {
+  const [tours, destinations] = await Promise.all([getTours(), getDestinations()]);
   return (
-    <div className="wrap">
-      <div className={s.hero}>
-        <span className="eyebrow">Safaris</span>
-        <h1>Every safari, one starting point</h1>
-        <p>Pick the style closest to what you have in mind &mdash; every itinerary is then tailored from there.</p>
-      </div>
-      <div className={s.grid}>
-        {CATEGORIES.map((c) => (
-          <article className={s.card} key={c.title}>
-            <div className={s.img} style={{ backgroundImage: `url(${c.img})` }} />
-            <div className={s.body}>
-              <h3 className={s.title}>{c.title}</h3>
-              <p className={s.desc}>{c.desc}</p>
-              <Link href="/plan" className={s.link}>Plan this safari &rarr;</Link>
-            </div>
-          </article>
-        ))}
+    <>
+      <div className={s.banner} style={{ backgroundImage: "url(/img/great-migration.jpg)" }}>
+        <div className={s.bannerInner}>
+          <span className={s.bannerKicker}>Every journey, one place</span>
+          <h1>Start Your Adventure</h1>
+        </div>
       </div>
 
-      <div className={s.sectionHead}>
-        <span className="eyebrow">Signature journeys</span>
-        <h1 style={{ fontSize: "clamp(26px,4vw,36px)" }}>Or browse a finished itinerary</h1>
-        <p>Six tours, ready to view in full &mdash; day-by-day itinerary, what&rsquo;s included, and pricing.</p>
+      <div className="wrap">
+        <div className={s.finder}>
+          <h2>Find the journey that suits you</h2>
+          <p>Every safari, trek and beach escape we run, privately guided and tailored to your pace. Filter by region, style or length, then open any trip for the full itinerary.</p>
+        </div>
+        <Suspense fallback={null}>
+          <SafarisBrowser tours={seededShuffle(tours, todaySeed + ":safaris")} destinations={destinations.map(({ id, slug, title }) => ({ id, slug, title }))} />
+        </Suspense>
       </div>
-      <Suspense fallback={null}>
-        <SafarisBrowser tours={seededShuffle(TOURS, todaySeed + ":safaris")} />
-      </Suspense>
-    </div>
+    </>
   );
 }

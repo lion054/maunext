@@ -2,11 +2,9 @@ import Link from "next/link";
 import ParallaxHero from "@/components/ParallaxHero";
 import Reveal from "@/components/Reveal";
 import MegaIcon, { type IconName } from "@/components/MegaIcon";
-import { TOURS } from "@/lib/tours";
+import { getTours } from "@/lib/tours";
 import { seededShuffle, todaySeed } from "@/lib/shuffle";
 import s from "./page.module.css";
-
-const HALAL_TOURS = seededShuffle(TOURS.filter((t) => t.collections?.includes("halal")), todaySeed + ":halal");
 
 const PROMISE: { title: string; desc: string; icon: IconName }[] = [
   { title: "Halal Dining", icon: "plate", desc: "Halal food throughout — certified restaurants, halal-friendly lodges and camps, and meals prepared to your requirements on safari and at the coast." },
@@ -21,7 +19,9 @@ const RAMADAN = [
   "Iftar ready at sunset",
 ];
 
-export default function HalalSafarisPage() {
+export default async function HalalSafarisPage() {
+  const tours = await getTours();
+  const HALAL_TOURS = seededShuffle(tours.filter((t) => t.collections?.includes("halal")), todaySeed + ":halal");
   return (
     <>
       <ParallaxHero image="/img/zanzibar-island.jpg" className={s.hero} overlayClassName={s.heroOverlay}>

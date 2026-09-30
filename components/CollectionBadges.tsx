@@ -1,8 +1,8 @@
 import MegaIcon from "./MegaIcon";
 
-const LABEL: Record<string, string> = { sublime: "Sublime", halal: "Halal Approved" };
+const LABEL: Record<string, string> = { sublime: "Sublime", halal: "Halal Approved", cultural: "Cultural Encounter", beach: "Beach Relaxation" };
 
-export default function CollectionBadges({ collections, className }: { collections?: ("sublime" | "halal")[]; className?: string }) {
+export default function CollectionBadges({ collections, className }: { collections?: ("sublime" | "halal" | "cultural" | "beach")[]; className?: string }) {
   if (!collections || collections.length === 0) return null;
   return (
     <div className={className} style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>

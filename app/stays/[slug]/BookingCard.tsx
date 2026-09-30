@@ -6,6 +6,7 @@ import type { Lodge } from "@/components/LodgeCard";
 import { useTrip } from "@/lib/trip/TripProvider";
 import { useCurrency } from "@/lib/currency/CurrencyProvider";
 import DateRangePicker from "@/components/DateRangePicker";
+import Stepper from "@/components/Stepper";
 import s from "./page.module.css";
 
 function nightsBetween(checkIn: string, checkOut: string) {
@@ -76,7 +77,7 @@ export default function BookingCard({ stay, availLabel, availClass }: { stay: Lo
         </label>
         {dateError && <p className={s.error}>Check-out must be after check-in.</p>}
         <label className={s.field}>Guests
-          <input type="number" value={guests} min={1} onChange={(e) => setGuests(Number(e.target.value))} />
+          <Stepper value={guests} onChange={setGuests} min={1} max={16} />
         </label>
         <label className={s.field}>Your name
           <input type="text" value={name} onChange={(e) => setName(e.target.value)} required />
@@ -150,7 +151,7 @@ export default function BookingCard({ stay, availLabel, availClass }: { stay: Lo
       {dateError && <p className={s.error}>Check-out must be after check-in.</p>}
 
       <label className={s.field}>Guests
-        <input type="number" value={guests} min={1} max={confirmedRoom.guests} onChange={(e) => setGuests(Number(e.target.value))} />
+        <Stepper value={guests} onChange={setGuests} min={1} max={confirmedRoom.guests} />
       </label>
 
       <label className={s.field}>Your name

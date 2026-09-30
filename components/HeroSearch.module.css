@@ -32,3 +32,10 @@
   .field { padding-top: 4px; padding-bottom: 4px; }
   .submit { height: 40px; }
 }
+
+@media (max-width: 620px) {
+  /* Long option labels ("Anywhere (43 journeys)") were clipped in a half-width column. */
+  .bar { padding: 8px; }
+  .field { flex: 1 1 100%; padding: 10px 14px; }
+  .field select { font-size: 16px; min-height: 28px; } /* 16px stops iOS zooming the page on focus */
+}

@@ -17,9 +17,8 @@
 .itemBody h3 { font-size: 15.5px; margin: 4px 0 2px; }
 .itemKind { font-size: 10.5px; text-transform: uppercase; letter-spacing: .07em; color: var(--tanova-accent); font-weight: 700; }
 .itemMeta { font-size: 12.5px; color: var(--tanova-muted); margin-bottom: 8px; }
-.itemRow { display: flex; align-items: center; justify-content: space-between; gap: 14px; }
-.qty { display: flex; align-items: center; gap: 8px; font-size: 12.5px; font-weight: 700; color: var(--tanova-text); }
-.qty input { width: 56px; border: 1px solid var(--tanova-line); border-radius: 8px; padding: 6px 8px; font-size: 13px; }
+.itemRow { display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
+.qty { display: flex; align-items: center; gap: 10px; font-size: 12.5px; font-weight: 700; color: var(--tanova-text); }
 .itemPrice { font-size: 16px; font-weight: 800; color: var(--tanova-primary); }
 .remove { align-self: start; background: none; border: none; color: var(--tanova-muted); cursor: pointer; padding: 4px; }
 .remove:hover { color: #b3441f; }

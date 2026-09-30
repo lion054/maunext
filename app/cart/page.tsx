@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useTrip } from "@/lib/trip/TripProvider";
 import { useCurrency } from "@/lib/currency/CurrencyProvider";
+import Stepper from "@/components/Stepper";
 import s from "./page.module.css";
 
 export default function CartPage() {
@@ -43,15 +44,10 @@ export default function CartPage() {
                 <h3>{item.title}</h3>
                 {item.meta && <p className={s.itemMeta}>{item.meta}</p>}
                 <div className={s.itemRow}>
-                  <label className={s.qty}>
-                    {item.unitLabel}
-                    <input
-                      type="number"
-                      min={1}
-                      value={item.qty}
-                      onChange={(e) => setQty(item.id, Number(e.target.value))}
-                    />
-                  </label>
+                  <div className={s.qty}>
+                    <span>{item.unitLabel}</span>
+                    <Stepper value={item.qty} onChange={(n) => setQty(item.id, n)} min={1} max={20} />
+                  </div>
                   <span className={s.itemPrice}>{format(item.qty * item.unitPrice)}</span>
                 </div>
               </div>

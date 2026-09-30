@@ -50,46 +50,25 @@ const NAV: NavItem[] = [
     href: "/destinations",
     mega: {
       quickLinks: [
-        { label: "The Great Migration", href: "/destinations/serengeti-national-park" },
-        { label: "Zanzibar", href: "/destinations/zanzibar" },
-        { label: "Kilimanjaro", href: "/destinations/mount-kilimanjaro" },
-        { label: "Ngorongoro Crater", href: "/destinations/ngorongoro" },
+        { label: "Northern Tanzania Safari", href: "/destinations/northern-tanzania-safari" },
+        { label: "Southern Tanzania", href: "/destinations/southern-tanzania" },
+        { label: "Coastal", href: "/destinations/coastal" },
       ],
       groups: [
         {
-          title: "Northern Circuit", col: 1,
+          title: "Tanzania", col: 1,
           links: [
-            { label: "Serengeti National Park", href: "/destinations/serengeti-national-park", icon: "compass" },
-            { label: "Ngorongoro", href: "/destinations/ngorongoro", icon: "mountain" },
-            { label: "Tarangire National Park", href: "/destinations/tarangire-national-park", icon: "compass" },
-            { label: "Lake Manyara National Park", href: "/destinations/lake-manyara-national-park", icon: "waves" },
+            { label: "Northern Tanzania Safari", href: "/destinations/northern-tanzania-safari", icon: "compass" },
+            { label: "Southern Tanzania", href: "/destinations/southern-tanzania", icon: "compass" },
+            { label: "Coastal", href: "/destinations/coastal", icon: "waves" },
           ],
           viewAllHref: "/destinations", viewAllLabel: "View All Destinations",
         },
         {
-          title: "Mountains & Highlands", col: 1,
+          title: "Beyond Tanzania", col: 2,
           links: [
-            { label: "Mount Kilimanjaro", href: "/destinations/mount-kilimanjaro", icon: "mountain" },
-            { label: "Arusha", href: "/destinations/arusha", icon: "compass" },
-            { label: "Materuni", href: "/destinations/materuni", icon: "mountain" },
-          ],
-        },
-        {
-          title: "Coast & Remote", col: 2,
-          links: [
-            { label: "Zanzibar", href: "/destinations/zanzibar", icon: "waves" },
-            { label: "Lushoto (Usambara)", href: "/destinations/lushoto-usambara", icon: "compass" },
-            { label: "Lake Natron", href: "/destinations/lake-natron", icon: "waves" },
-            { label: "Mkomazi National Park", href: "/destinations/mkomazi-national-park", icon: "compass" },
-          ],
-          viewAllHref: "/destinations", viewAllLabel: "View All Destinations",
-        },
-        {
-          title: "Must See", col: 2,
-          links: [
-            { label: "The Great Migration", href: "/destinations/serengeti-national-park", icon: "users" },
-            { label: "Ngorongoro Crater", href: "/destinations/ngorongoro", icon: "users" },
-            { label: "Kilimanjaro Summit", href: "/trekking", icon: "mountain" },
+            { label: "Rwanda", href: "/destinations/rwanda", icon: "mountain" },
+            { label: "Kenya", href: "/destinations/kenya", icon: "compass" },
           ],
         },
       ],
@@ -103,6 +82,8 @@ const NAV: NavItem[] = [
       quickLinks: [
         { label: "Sublime Collection", href: "/sublime" },
         { label: "Halal Safaris", href: "/halal-safaris" },
+        { label: "Day Trips", href: "/safaris?type=day_trip" },
+        { label: "Packages", href: "/safaris?type=package" },
         { label: "Golf Safari", href: "/safaris/luxury-golf-serengeti-migration-safari" },
         { label: "Cultural & Community", href: "/safaris?style=Cultural%20%26%20Community" },
       ],
@@ -296,7 +277,7 @@ const NAV: NavItem[] = [
 
 export default function Header() {
   const [open, setOpen] = useState<string | null>(null);
-  const [condensed, setCondensed] = useState(false);
+  const [condensedAt, setCondensedAt] = useState<string | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [currencyOpen, setCurrencyOpen] = useState(false);
   const headerRef = useRef<HTMLElement>(null);
@@ -305,24 +286,17 @@ export default function Header() {
   const { currency, setCurrency } = useCurrency();
   const pathname = usePathname();
   const hero = isHeroPage(pathname);
+  // Condensed only counts on the page it was scrolled on, so a navigation (which lands at the top)
+  // resets it immediately with no effect-driven setState.
+  const condensed = condensedAt === pathname;
   const transparent = hero && !condensed;
   const active = getActiveLabel(pathname);
 
-  // Every navigation lands at the top of the new page (Next's default scroll
-  // behavior), so force the header back to its non-condensed state immediately
-  // rather than trusting window.scrollY here — Next's own scroll reset can
-  // land a frame after this runs, which previously caused the header to
-  // briefly (or, if the user never scrolled again, permanently) carry over
-  // the *previous* page's condensed state onto a fresh hero page.
   useEffect(() => {
-    setCondensed(false);
-  }, [pathname]);
-
-  useEffect(() => {
-    const onScroll = () => setCondensed(window.scrollY > 24);
+    const onScroll = () => setCondensedAt(window.scrollY > 24 ? pathname : null);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  }, [pathname]);
 
   useEffect(() => {
     if (!open) return;

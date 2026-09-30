@@ -1,0 +1,24 @@
+.stepper {
+  display: flex; align-items: center; justify-content: space-between;
+  border: 1.5px solid var(--tanova-line); border-radius: var(--radius-sm);
+  padding: 6px 8px; background: #fff;
+  transition: border-color var(--dur-fast) var(--ease-out);
+}
+.stepper:focus-within { border-color: var(--tanova-primary); box-shadow: 0 0 0 4px rgba(33,83,82,.12); }
+
+.btn {
+  width: 30px; height: 30px; border-radius: 50%; border: 1.5px solid var(--tanova-line);
+  background: #fff; color: var(--tanova-primary); font-size: 16px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0;
+  transition: background var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out);
+}
+.btn:hover:not(:disabled) { background: var(--muted-bg); border-color: var(--tanova-primary); }
+.btn:active:not(:disabled) { transform: scale(.92); }
+.btn:disabled { opacity: .35; cursor: not-allowed; }
+
+.value { flex: 1; text-align: center; font-size: 14px; font-weight: 700; color: var(--tanova-text); }
+.label { display: block; font-size: 12.5px; color: var(--tanova-muted); font-weight: 400; margin-top: 1px; }
+
+@media (pointer: coarse) {
+  .btn { width: 44px; height: 44px; font-size: 20px; }
+}

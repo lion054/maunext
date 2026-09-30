@@ -2,11 +2,9 @@ import Link from "next/link";
 import ParallaxHero from "@/components/ParallaxHero";
 import Reveal from "@/components/Reveal";
 import DestinationsMap from "@/components/DestinationsMap";
-import { DESTINATIONS } from "@/lib/destinations";
+import { getDestinations } from "@/lib/destinations";
 import { seededShuffle, todaySeed } from "@/lib/shuffle";
 import s from "./page.module.css";
-
-const SHUFFLED_DESTINATIONS = seededShuffle(DESTINATIONS, todaySeed + ":destinations");
 
 const HIGHLIGHTS = [
   { emoji: "\u{1F992}", title: "Exceptional Wildlife", desc: "Prolific and diverse wildlife in settings that remind you how wild Tanzania truly remains." },
@@ -35,7 +33,9 @@ const ACTIVITIES = [
   { n: "04", title: "Sundowner Stopouts", desc: "A perfect drink on the plains as the African sun sets — one of those moments that lasts a lifetime." },
 ];
 
-export default function DestinationsPage() {
+export default async function DestinationsPage() {
+  const destinations = await getDestinations();
+  const SHUFFLED_DESTINATIONS = seededShuffle(destinations, todaySeed + ":destinations");
   return (
     <>
       <ParallaxHero image="/img/great-migration.jpg" className={s.hero} overlayClassName={s.heroOverlay}>
@@ -96,7 +96,7 @@ export default function DestinationsPage() {
           <p style={{ fontSize: 14, color: "var(--tanova-muted)", marginTop: 10, maxWidth: "60ch" }}>Hover or tap a pin to see where each destination sits relative to the others.</p>
         </Reveal>
         <Reveal style={{ marginBottom: "var(--sp-7)" }}>
-          <DestinationsMap destinations={DESTINATIONS} />
+          <DestinationsMap destinations={destinations} />
         </Reveal>
         <div className={s.grid}>
           {SHUFFLED_DESTINATIONS.map((d, i) => (

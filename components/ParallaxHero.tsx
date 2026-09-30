@@ -1,12 +1,22 @@
 "use client";
 
 import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useRef, useSyncExternalStore, type ReactNode } from "react";
 
 /** Chromium-only Network Information API; absent on Safari/Firefox, where we fall
  *  back to loading the video as before — this only ever makes the page lighter,
  *  never heavier, for browsers that don't support it. */
-type NetworkInformation = { saveData?: boolean; effectiveType?: string };
+type Conn = { saveData?: boolean; effectiveType?: string; addEventListener?: (t: string, f: () => void) => void; removeEventListener?: (t: string, f: () => void) => void };
+const connection = () => (navigator as unknown as { connection?: Conn }).connection;
+function wantsLessData() {
+  const conn = connection();
+  return !!conn && (!!conn.saveData || /2g/.test(conn.effectiveType ?? ""));
+}
+function subscribeConnection(notify: () => void) {
+  const conn = connection();
+  conn?.addEventListener?.("change", notify);
+  return () => conn?.removeEventListener?.("change", notify);
+}
 
 export default function ParallaxHero({
   image,
@@ -29,12 +39,7 @@ export default function ParallaxHero({
 
   // Skip the multi-MB hero video for visitors who've asked for less data or are on
   // a slow connection — they get the (already-required) poster image instead.
-  const [skipVideo, setSkipVideo] = useState(false);
-  useEffect(() => {
-    const conn = (navigator as unknown as { connection?: NetworkInformation }).connection;
-    if (!conn) return;
-    if (conn.saveData || (conn.effectiveType && /2g/.test(conn.effectiveType))) setSkipVideo(true);
-  }, []);
+  const skipVideo = useSyncExternalStore(subscribeConnection, wantsLessData, () => false);
 
   return (
     <section ref={ref} className={className}>

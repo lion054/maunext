@@ -1,8 +1,8 @@
 import Link from "next/link";
 import ParallaxHero from "@/components/ParallaxHero";
 import Reveal from "@/components/Reveal";
-import { DEPARTURES } from "@/lib/departures";
-import { getTour } from "@/lib/tours";
+import { getDepartures } from "@/lib/departures";
+import { getTours } from "@/lib/tours";
 import Price from "@/components/Price";
 import s from "./page.module.css";
 
@@ -25,8 +25,10 @@ const MONTHS: Month[] = [
 
 const SEASON_LABEL: Record<Month["season"], string> = { dry: "Dry season", wet: "Long rains", shoulder: "Shoulder season" };
 
-export default function CalendarPage() {
-  const departuresByDate = [...DEPARTURES].sort((a, b) => a.date.localeCompare(b.date));
+export default async function CalendarPage() {
+  const [departures, tours] = await Promise.all([getDepartures(), getTours()]);
+  const tourBySlug = new Map(tours.map((t) => [t.slug, t]));
+  const departuresByDate = [...departures].sort((a, b) => a.date.localeCompare(b.date));
 
   return (
     <>
@@ -74,7 +76,7 @@ export default function CalendarPage() {
           ) : (
             <div className={s.depGrid}>
               {departuresByDate.map((d) => {
-                const tour = getTour(d.tourSlug);
+                const tour = tourBySlug.get(d.tourSlug);
                 if (!tour) return null;
                 const pct = Math.round(((d.capacity - d.seatsLeft) / d.capacity) * 100);
                 const dateLabel = new Date(d.date + "T00:00:00").toLocaleDateString(undefined, { weekday: "short", day: "numeric", month: "long", year: "numeric" });

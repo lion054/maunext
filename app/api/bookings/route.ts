@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { TOUR_SERVICE_IDS, HOTEL_SERVICE_IDS } from "@/lib/tanovaIds";
+import { getTours } from "@/lib/tours";
+import { getStays } from "@/lib/stays";
 
 /** Server-side proxy for the real Tanova booking system (POST /bookings). Same
  *  key-isolation rule as /api/trip-planner and /api/concierge — the secret key never
@@ -39,11 +40,13 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "kind, slug, startDate, adults, firstName, lastName and email are required." }, { status: 400 });
   }
 
-  const idMap = b.kind === "tour" ? TOUR_SERVICE_IDS : HOTEL_SERVICE_IDS;
-  const serviceId = idMap[b.slug];
-  if (!serviceId) {
+  // Resolved from the live catalogue, not a static map — a listing added or renamed in the
+  // portal is bookable here immediately, no redeploy needed to teach this route its id.
+  const listing = b.kind === "tour" ? (await getTours()).find((t) => t.slug === b.slug) : (await getStays()).find((s) => s.slug === b.slug);
+  if (!listing) {
     return NextResponse.json({ error: "We don't recognize that listing." }, { status: 404 });
   }
+  const serviceId = listing.id;
 
   const payload: Record<string, unknown> = {
     service_type: b.kind === "tour" ? "tour" : "hotel",

@@ -2,9 +2,9 @@ import { NextResponse } from "next/server";
 import { rateLimit } from "@/lib/rateLimit";
 import { groqChat } from "@/lib/groq";
 import { offlineChatReply, type ChatReply, type PageLink } from "@/lib/samira-offline";
-import { TOURS } from "@/lib/tours";
-import { DEPARTURES } from "@/lib/departures";
-import { DESTINATIONS } from "@/lib/destinations";
+import { getTours } from "@/lib/tours";
+import { getDepartures } from "@/lib/departures";
+import { getDestinations } from "@/lib/destinations";
 
 export const runtime = "nodejs";
 
@@ -46,18 +46,19 @@ const RESPOND_TOOL = {
   },
 };
 
-function buildCatalogContext() {
-  const featured = TOURS.filter((t) => t.price).slice(0, 30);
+async function buildCatalogContext() {
+  const [tours, departures, destinations] = await Promise.all([getTours(), getDepartures(), getDestinations()]);
+  const featured = tours.filter((t) => t.price).slice(0, 30);
   let ctx = "\n\nLIVE CATALOG (real Mauly tours — never invent a slug not listed here):";
   for (const t of featured) {
     ctx += `\n• ${t.title} [slug: ${t.slug}] — ${t.days}d, ${t.region}, from USD ${t.price}${t.collections?.length ? ` (${t.collections.join(", ")})` : ""}`;
   }
   ctx += "\n\nFIXED-DATE KILIMANJARO GROUP DEPARTURES (open right now):";
-  for (const d of DEPARTURES) {
+  for (const d of departures) {
     ctx += `\n• ${d.tourSlug} — ${d.date}, USD ${d.price}, ${d.seatsLeft}/${d.capacity} seats left`;
   }
   ctx += "\n\nDESTINATION PAGES (link as /destinations/[slug]):";
-  for (const d of DESTINATIONS) ctx += `\n• ${d.title} [slug: ${d.slug}]`;
+  for (const d of destinations) ctx += `\n• ${d.title} [slug: ${d.slug}]`;
   return ctx;
 }
 
@@ -99,7 +100,7 @@ async function tryClaude(messages: { role: string; content: string }[]): Promise
       body: JSON.stringify({
         model: "claude-haiku-4-5-20251001",
         max_tokens: 1000,
-        system: SYSTEM + buildCatalogContext(),
+        system: SYSTEM + (await buildCatalogContext()),
         tools: [RESPOND_TOOL],
         tool_choice: { type: "tool", name: "respond" },
         messages: messages.slice(-10),

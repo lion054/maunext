@@ -1,11 +1,12 @@
 import { Suspense } from "react";
-import { STAYS } from "@/lib/stays";
+import { getStays } from "@/lib/stays";
 import { seededShuffle, todaySeed } from "@/lib/shuffle";
 import StaysBrowser from "./StaysBrowser";
 import s from "./page.module.css";
 
-export default function StaysPage() {
-  const stays = seededShuffle(STAYS, todaySeed + ":stays");
+export default async function StaysPage() {
+  const allStays = await getStays();
+  const stays = seededShuffle(allStays, todaySeed + ":stays");
   return (
     <div className="wrap">
       <div className={s.head}>

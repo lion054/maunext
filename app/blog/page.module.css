@@ -55,3 +55,7 @@
   .river { grid-template-columns: 1fr; }
   .masthead { padding-top: 32px; }
 }
+
+@media (pointer: coarse) {
+  .navItem { padding-top: 12px; padding-bottom: 12px; }
+}

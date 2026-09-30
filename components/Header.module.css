@@ -243,3 +243,9 @@
   .actions .btn { display: none; }
   .hamburger { display: flex; }
 }
+
+/* Touch devices: 44px minimum tap targets (WCAG 2.5.5 / Apple HIG). */
+@media (pointer: coarse) {
+  .cart, .hamburger { width: 44px; height: 44px; }
+  .logo { min-width: 44px; min-height: 44px; }
+}

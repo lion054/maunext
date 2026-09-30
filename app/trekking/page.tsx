@@ -2,7 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import ParallaxHero from "@/components/ParallaxHero";
 import Reveal from "@/components/Reveal";
-import { departuresForTour } from "@/lib/departures";
+import { getDepartures } from "@/lib/departures";
 import s from "./page.module.css";
 
 const STATS = [
@@ -25,7 +25,8 @@ const ROUTES = [
 
 const DIFF_LABEL: Record<string, string> = { moderate: "Moderate", challenging: "Challenging", veryhard: "Very Hard" };
 
-export default function TrekkingPage() {
+export default async function TrekkingPage() {
+  const departures = await getDepartures();
   return (
     <>
       <ParallaxHero image="/img/kilimanjaro-summit-night.jpg" className={s.hero} overlayClassName={s.heroOverlay}>
@@ -75,7 +76,7 @@ export default function TrekkingPage() {
         <div className={s.explorer}>
           {ROUTES.map((r, i) => {
             const pct = parseInt(r.success, 10);
-            const [nextDeparture] = departuresForTour(r.tourSlug);
+            const [nextDeparture] = departures.filter((d) => d.tourSlug === r.tourSlug);
             return (
               <Reveal key={r.name} delay={i * 0.04}>
                 <Link href={`/safaris/${r.tourSlug}`} className={s.explorerRow}>
