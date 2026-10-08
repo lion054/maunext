@@ -79,7 +79,8 @@ RULES:
 - Always name a specific real package (with price) when relevant, using ONLY slugs from LIVE CATALOG below. Never invent a slug or price.
 - Link package pages as /safaris/[slug], destinations as /destinations/[slug], the planner as /plan.
 - Always include 1-3 page_links relevant to the topic.
-- Set needs_ticket true when the visitor wants to talk to a human, has a complaint, or needs something only a person can resolve (exact date negotiation, group rates, special requirements) — and set show_cta true.
+- BOOKING DIRECT: you help the visitor book with Mauly directly on this site. When they like a package or want to book, confirm the start date and the number of travellers (only what is missing, one question at a time), then tell them the Book button under your message takes them to that trip's booking form to choose a date and pay securely. Always put the one package you recommend in page_links (/safaris/[slug]) so the button appears. Nothing is booked or paid in the chat: never say a booking is made. Never send a visitor who wants to book to email, phone or WhatsApp.
+- Set needs_ticket true when the visitor wants to talk to a human (booking is NOT one of those cases: use the Book button), has a complaint, or needs something only a person can resolve (exact date negotiation, group rates, special requirements) — and set show_cta true.
 - Call the respond tool for every reply. Never output plain text.`;
 
 async function tryClaude(messages: { role: string; content: string }[]): Promise<ChatReply | null> {
@@ -156,6 +157,24 @@ async function tryGroq(messages: { role: string; content: string }[]): Promise<C
   };
 }
 
+/** Keeps links to pages that exist (repairing a slug that is nearly right), and adds the Book button for the recommended safari. */
+async function finalize(result: Record<string, any>) {
+  const tours = await getTours().catch(() => []);
+  if (!tours.length) return result;
+  const slugs = new Set(tours.map((t) => t.slug));
+  const links: PageLink[] = [];
+  for (const l of Array.isArray(result.pageLinks) ? result.pageLinks : []) {
+    const m = /^\/safaris\/([^/?#]+)$/.exec(l?.url || "");
+    if (!m || slugs.has(m[1])) { links.push(l); continue; }
+    const hits = tours.filter((t) => t.slug.endsWith("-" + m[1]) || (m[1].length > 6 && t.slug.includes(m[1])));
+    if (hits.length === 1) links.push({ ...l, url: `/safaris/${hits[0].slug}` });
+  }
+  const first = links.map((l) => /^\/safaris\/([^/?#]+)$/.exec(l.url))?.find(Boolean);
+  const tour = first && tours.find((t) => t.slug === first[1]);
+  const book = tour ? [{ label: `Book ${tour.title} →`, url: `/safaris/${tour.slug}#book`, type: "package" } as PageLink] : [];
+  return { ...result, pageLinks: [...book, ...links].slice(0, 4), needsTicket: false, showCta: false };
+}
+
 export async function POST(request: Request) {
   const ip = request.headers.get("x-forwarded-for")?.split(",")[0] ?? "unknown";
   if (!rateLimit(`chat:${ip}`, 20, 60_000)) {
@@ -178,7 +197,7 @@ export async function POST(request: Request) {
   // Layer 1: Claude
   try {
     const result = await tryClaude(messages);
-    if (result) return NextResponse.json(result, { status: 200 });
+    if (result) return NextResponse.json(await finalize(result), { status: 200 });
   } catch (err) {
     console.warn("[Samira] Claude unavailable, trying Groq:", (err as Error).message);
   }
@@ -186,11 +205,11 @@ export async function POST(request: Request) {
   // Layer 2: Groq
   try {
     const result = await tryGroq(messages);
-    if (result) return NextResponse.json(result, { status: 200 });
+    if (result) return NextResponse.json(await finalize(result), { status: 200 });
   } catch (err) {
     console.warn("[Samira] Groq unavailable, using offline rules:", (err as Error).message);
   }
 
   // Layer 3: offline rules — always succeeds
-  return NextResponse.json(offlineChatReply(lastUserMsg), { status: 200 });
+  return NextResponse.json(await finalize(offlineChatReply(lastUserMsg) as Record<string, any>), { status: 200 });
 }
