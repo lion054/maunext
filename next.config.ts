@@ -7,6 +7,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       { protocol: "https", hostname: "portal.tsokatravel.com" },
       { protocol: "https", hostname: "portal.mauly-tours.com" },
+      { protocol: "https", hostname: "tanovaapp.com" },
     ],
   },
 };
