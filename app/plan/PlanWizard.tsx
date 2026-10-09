@@ -200,6 +200,8 @@ export default function PlanWizard({ destinations, tours }: { destinations: Dest
   const [endDate, setEndDate] = useState("");
   const [guests, setGuests] = useState(2);
   const [budget, setBudget] = useState<(typeof BUDGETS)[number]["id"]>("mid-range");
+  // What the whole party can spend, when they know. It wins over the tier: plans are built to fit it.
+  const [budgetAmount, setBudgetAmount] = useState("");
 
   const [loading, setLoading] = useState(false);
   const [loadingMsg, setLoadingMsg] = useState(0);
@@ -278,7 +280,7 @@ export default function PlanWizard({ destinations, tours }: { destinations: Dest
     // (up to 8) is shown directly; the AI generator only fills in when fewer than 3 real
     // tours match, so a request is almost never answered with nothing at all.
     const desiredDays = daysBetween(startDate, endDate);
-    const budgetMax = BUDGETS.find((b) => b.id === budget)?.max ?? Infinity;
+    const budgetMax = Number(budgetAmount) >= 50 ? Number(budgetAmount) / Math.max(1, guests) : (BUDGETS.find((b) => b.id === budget)?.max ?? Infinity);
     const scored = tours
       .map((t) => ({ tour: t, score: scoreTour(t, { placeId, placeName: destName, tripType, desiredDays, budgetMax }) }))
       .filter((x): x is { tour: Tour; score: number } => x.score !== null && x.score >= MATCH_THRESHOLD)
@@ -325,7 +327,9 @@ export default function PlanWizard({ destinations, tours }: { destinations: Dest
           end_date: endDate,
           guests,
           budget,
+          ...(Number(budgetAmount) >= 50 ? { budget_amount: Math.min(1000000, Math.round(Number(budgetAmount))) } : {}),
           trip_type: tripType || undefined,
+          length_flex: 3,   // Mauly sells trips of fixed length: offer the nearest ones at their own length
         }),
       });
       const data = await res.json();
@@ -454,6 +458,13 @@ export default function PlanWizard({ destinations, tours }: { destinations: Dest
               </button>
             ))}
           </div>
+
+          <label className={s.field}>Or your own budget for the whole trip (USD, optional)
+            <input
+              type="number" inputMode="numeric" min={50} step={50} placeholder="e.g. 3000"
+              value={budgetAmount} onChange={(e) => setBudgetAmount(e.target.value)}
+            />
+          </label>
 
           <div className={s.actions}>
             <button className="btn btn--primary" type="button" onClick={generateTrip} disabled={!canGenerate || loading}>

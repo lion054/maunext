@@ -46,7 +46,7 @@ export async function POST(request: Request) {
     // without ever seeing the upstream response body verbatim, which could leak internals.
     const message =
       upstream.status === 402 ? "Trip planning is temporarily unavailable — please contact us directly."
-      : upstream.status === 422 ? "Please check your dates and try again."
+      : upstream.status === 422 ? (typeof data?.warnings?.[0] === "string" ? String(data.warnings[0]).slice(0, 240) : "Please check your dates and try again.")
       : "Something went wrong generating your trip.";
     return NextResponse.json({ error: message }, { status: upstream.status });
   }
